@@ -1,0 +1,5 @@
+# cat=basic; type=boolean; label=Use Articles: For different sizes, colors, packaging units etc.
+use_articles = 0
+
+# cat=basic; type=boolean; label=RTE for Teaser: If enabled product teasers can be edited using an RTE
+teaser_rte = 0

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'multicatalog'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_multicatalog_article">Article</label>
+			<label index="tx_multicatalog_article.code">Code</label>
+			<label index="tx_multicatalog_article.title">Title</label>
+			<label index="tx_multicatalog_article.price">Price</label>
+			<label index="tx_multicatalog_catalog">Catalog</label>
+			<label index="tx_multicatalog_catalog.code">Code</label>
+			<label index="tx_multicatalog_catalog.title">Title</label>
+			<label index="tx_multicatalog_catalog.description">Description</label>
+			<label index="tx_multicatalog_catalog.pictures">Pictures</label>
+			<label index="tx_multicatalog_catalog.price">Price</label>
+			<label index="tx_multicatalog_catalog.teaser">Teaser</label>
+			<label index="tx_multicatalog_catalog.articles">Articles</label>
+			<label index="tx_multicatalog_catalog.tabs.general">General</label>
+			<label index="tx_multicatalog_catalog.tabs.articles">Articles</label>
+			<label index="tt_content.list_type_pi1">Product Catalog</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="tx_multicatalog_article">Artikel</label>
+			<label index="tx_multicatalog_article.code">Bestellnummer</label>
+			<label index="tx_multicatalog_article.title">Titel</label>
+			<label index="tx_multicatalog_article.price">Preis</label>
+			<label index="tx_multicatalog_catalog">Produkt</label>
+			<label index="tx_multicatalog_catalog.code">Code</label>
+			<label index="tx_multicatalog_catalog.title">Titel</label>
+			<label index="tx_multicatalog_catalog.description">Beschreibung</label>
+			<label index="tx_multicatalog_catalog.pictures">Bilder</label>
+			<label index="tx_multicatalog_catalog.price">Preis</label>
+			<label index="tx_multicatalog_catalog.teaser">Kurzbeschreibung</label>
+			<label index="tx_multicatalog_catalog.articles">Artikel</label>
+			<label index="tx_multicatalog_catalog.tabs.general">Allgemein</label>
+			<label index="tx_multicatalog_catalog.tabs.articles">Artikel</label>
+			<label index="tt_content.list_type_pi1">Produktkatalog</label>
+		</languageKey>
+		<languageKey index="fr" type="array">
+			<label index="tx_multicatalog_article">Article</label>
+			<label index="tx_multicatalog_article.code">Code</label>
+			<label index="tx_multicatalog_article.title">Titre</label>
+			<label index="tx_multicatalog_article.price">prix</label>
+			<label index="tx_multicatalog_catalog">Catalogue</label>
+			<label index="tx_multicatalog_catalog.code">Code</label>
+			<label index="tx_multicatalog_catalog.title">Titre</label>
+			<label index="tx_multicatalog_catalog.description">Description</label>
+			<label index="tx_multicatalog_catalog.pictures">Images</label>
+			<label index="tx_multicatalog_catalog.price">prix</label>
+			<label index="tx_multicatalog_catalog.teaser">Description rapide</label>
+			<label index="tx_multicatalog_catalog.articles">Articles</label>
+		</languageKey>
+	</data>
+</T3locallang>

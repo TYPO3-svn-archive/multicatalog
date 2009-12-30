@@ -1,0 +1,3 @@
+plugin.tx_multicatalog_pi1 {
+	template = EXT:multicatalog/pi1/res/template.html
+}
