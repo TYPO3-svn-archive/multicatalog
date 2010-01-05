@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Sebastian Gebhard <sebastian.gebhard@gmail.com>
+*  (c) 2010 Sebastian Gebhard <sebastian.gebhard@gmail.com>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -109,7 +109,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		$markerArray = array();
 		
 		$pids = $this->pi_getPidList($this->cObj->data['pages'],$this->cObj->data['recursive']);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_catalog', 'pid IN ('.$pids.')');
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_catalog', 'pid IN ('.$pids.')', '', 'sorting ASC');
 		while($this->record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 			$markerArray['###RECORDS###'] .= $this->renderRecord();
 		}
@@ -208,13 +208,16 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		if ($this->record['articles']) {
 			$markerArray['###ARTICLES###'] = '';
 			$articles = array();
+			$i = 0;
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_article', 'uid IN ('.$this->record['articles'].')', '', 'sorting ASC');
 			while($article = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 				
+				// Fill cObj with article fields, product fields (prefixed with "product_") and the iteration number
 				$this->cObj->data = $article;
 				foreach($this->record as $field => $value){
 					$this->cObj->data['product_'.$field] = $value;
 				}
+				$this->cObj->data['i'] = $i;
 				
 					// render additional markers
 				foreach($this->conf[$this->view . '.']['articles.']['additionalMarkers.'] as $marker => $markerCobj){
@@ -238,6 +241,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 					);
 				}
 				$markerArray['###ARTICLES###'] .= $this->cObj->substituteMarkerArrayCached($this->articletemplate, $subMarkerArray);
+				$i++;
 			}
 		}
 		
