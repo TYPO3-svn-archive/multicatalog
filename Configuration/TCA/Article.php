@@ -43,6 +43,16 @@ $TCA['tx_multicatalog_article'] = array (
 				'eval' => 'double2',
 			)
 		),
+		'parentid' => array (
+			'config' => array (
+				'type' => 'passthrough',
+			)
+		),
+		'parenttable' => array (
+			'config' => array (
+				'type' => 'passthrough',
+			)
+		),
 	),
 	'types' => array (
 		'0' => array('showitem' => 'code;;1')

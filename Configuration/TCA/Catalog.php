@@ -148,6 +148,9 @@ if($_EXTCONF['use_articles']){
 			'config' => array (
 				'type' => 'inline',
 				'foreign_table' => 'tx_multicatalog_article',
+				'foreign_sortby' => 'sorting',
+				'foreign_field' => 'irre_parentid',
+				'foreign_table_field' => 'irre_parenttable',
 				'maxitems' => 100,
 				'appearance' => array(
 					'showSynchronizationLink' => 0,

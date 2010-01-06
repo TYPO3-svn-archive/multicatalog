@@ -40,6 +40,8 @@ CREATE TABLE tx_multicatalog_article (
 	code tinytext,
 	title tinytext,
 	price tinytext,
+	irre_parentid int(11) DEFAULT '0' NOT NULL,
+	irre_parenttable tinytext NOT NULL
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
