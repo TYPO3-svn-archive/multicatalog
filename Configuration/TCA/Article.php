@@ -6,7 +6,7 @@ $TCA['tx_multicatalog_article'] = array (
 	'interface' => array (
 		'showRecordFieldList' => 'hidden,starttime,endtime,fe_group,code,title,description,pictures,price'
 	),
-	'feInterface' => $TCA['tx_multicatalog_catalog']['feInterface'],
+	'feInterface' => $TCA['tx_multicatalog_article']['feInterface'],
 	'columns' => array (
 		'hidden' => array (		
 			'exclude' => 1,
