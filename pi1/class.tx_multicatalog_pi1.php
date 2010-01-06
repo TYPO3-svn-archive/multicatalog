@@ -209,7 +209,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$markerArray['###ARTICLES###'] = '';
 			$articles = array();
 			$i = 0;
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_article', 'uid IN ('.$this->record['articles'].')', '', 'sorting ASC');
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_article', 'irre_parentid = '.$this->record['uid'], '', 'sorting ASC');
 			while($article = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 				
 				// Fill cObj with article fields, product fields (prefixed with "product_") and the iteration number
