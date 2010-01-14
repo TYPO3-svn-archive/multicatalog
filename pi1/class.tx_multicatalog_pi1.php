@@ -111,7 +111,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		
 		$this->pids = $this->pi_getPidList($this->cObj->data['pages'],$this->cObj->data['recursive']);
 		$where = 'deleted = 0 AND hidden = 0 AND sys_language_uid = '.intval($GLOBALS['TSFE']->sys_language_content).' AND pid IN ('.$this->pids.')';
-		echo '<!-- '.$where.' -->';
+		
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_catalog', $where, '', 'sorting ASC');
 		while($this->record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 			$markerArray['###RECORDS###'] .= $this->renderRecord();
