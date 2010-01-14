@@ -16,6 +16,7 @@ $TCA['tx_multicatalog_catalog'] = array (
 		'delete' => 'deleted',
 		'transOrigPointerField' => 'l18n_parent',
 		'transOrigDiffSourceField' => 'l18n_diffsource',
+		'languageField' => 'sys_language_uid',
 		'dividers2tabs' => TRUE,
 		'enablecolumns' => array (		
 			'disabled' => 'hidden',	

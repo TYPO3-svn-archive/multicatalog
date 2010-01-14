@@ -74,6 +74,27 @@ $TCA['tx_multicatalog_catalog'] = array (
             'config'=>array(
                 'type'=>'passthrough')
         ),
+		'sys_language_uid' => Array (
+            'exclude' => 1,
+            'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
+            'config' => Array (
+                'type' => 'select',
+                'foreign_table' => 'sys_language',
+                'foreign_table_where' => 'ORDER BY sys_language.title',
+                'items' => Array(
+                    Array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages',-1),
+                    Array('LLL:EXT:lang/locallang_general.php:LGL.default_value',0)
+                )
+            )
+        ),
+		't3ver_label' => Array (
+            'displayCond' => 'FIELD:t3ver_label:REQ:true',
+            'label' => 'LLL:EXT:lang/locallang_general.php:LGL.versionLabel',
+            'config' => Array (
+                'type'=>'none',
+                'cols' => 27
+            )
+        ),
 		'code' => array (		
 			'exclude' => 0,		
 			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.code',		
@@ -147,10 +168,11 @@ $TCA['tx_multicatalog_catalog'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => '--div--;LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.tabs.general,hidden;;1;;1-1-1, code, title;;;;2-2-2, description;;;richtext[]:rte_transform[imgpath=uploads/tx_multicatalog/rte/];3-3-3, pictures, price')
+		'0' => array('showitem' => '--div--;LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.tabs.general,sys_language_uid;;2;;3-3-3hidden;;1;;1-1-1, code, title;;;;2-2-2, description;;;richtext[]:rte_transform[imgpath=uploads/tx_multicatalog/rte/];3-3-3, pictures, price')
 	),
 	'palettes' => array (
-		'1' => array('showitem' => 'starttime, endtime, fe_group')
+		'1' => array('showitem' => 'starttime, endtime, fe_group'),
+		'2' => Array('showitem' => 't3ver_label,l18n_parent'),
 	)
 );
 
