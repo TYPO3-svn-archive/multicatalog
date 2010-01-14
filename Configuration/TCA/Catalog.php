@@ -57,6 +57,23 @@ $TCA['tx_multicatalog_catalog'] = array (
 				'foreign_table' => 'fe_groups'
 			)
 		),
+		'l18n_parent' => Array (
+			'displayCond' => 'FIELD:sys_language_uid:>:0',
+			'exclude' => 1,
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.l18n_parent',
+			'config' => Array (
+				'type' => 'select',
+				'items' => Array (
+				    Array('', 0),
+				),
+				'foreign_table' => 'tx_multicatalog_catalog',
+				'foreign_table_where' => 'AND tx_multicatalog_catalog.uid=###REC_FIELD_l18n_parent### AND tx_multicatalog_catalog.sys_language_uid IN (-1,0)',
+			)
+        ),
+        'l18n_diffsource' => Array(
+            'config'=>array(
+                'type'=>'passthrough')
+        ),
 		'code' => array (		
 			'exclude' => 0,		
 			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.code',		

@@ -13,6 +13,8 @@ CREATE TABLE tx_multicatalog_catalog (
 	starttime int(11) DEFAULT '0' NOT NULL,
 	endtime int(11) DEFAULT '0' NOT NULL,
 	fe_group int(11) DEFAULT '0' NOT NULL,
+	l18n_parent int(11) DEFAULT '0' NOT NULL,
+	l18n_diffsource mediumblob NOT NULL,
 	code tinytext,
 	title tinytext,
 	description text,

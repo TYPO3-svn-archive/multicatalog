@@ -22,6 +22,7 @@ $TCA['tx_multicatalog_article'] = array (
 			'config' => array (
 				'type' => 'input',	
 				'size' => '10',
+				'eval' => 'trim',
 			)
 		),
 		'title' => array (		
