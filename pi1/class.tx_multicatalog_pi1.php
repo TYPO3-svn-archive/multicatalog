@@ -41,8 +41,9 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	var $prefixId      = 'tx_multicatalog_pi1';		// Same as class name
 	var $scriptRelPath = 'pi1/class.tx_multicatalog_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey        = 'multicatalog';	// The extension key.
-	private $uploadFolder = 'uploads/tx_multicatalog/';
 	var $pi_checkCHash = true;
+	
+	private $uploadFolder = 'uploads/tx_multicatalog/';
 	
 	/**
 	 * Main method of your PlugIn
@@ -108,8 +109,10 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		
 		$markerArray = array();
 		
-		$pids = $this->pi_getPidList($this->cObj->data['pages'],$this->cObj->data['recursive']);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_catalog', 'pid IN ('.$pids.')', '', 'sorting ASC');
+		$this->pids = $this->pi_getPidList($this->cObj->data['pages'],$this->cObj->data['recursive']);
+		$where = 'deleted = 0 AND hidden = 0 AND sys_language_uid = '.intval($GLOBALS['TSFE']->sys_language_content).' AND pid IN ('.$this->pids.')';
+		echo '<!-- '.$where.' -->';
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_catalog', $where, '', 'sorting ASC');
 		while($this->record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 			$markerArray['###RECORDS###'] .= $this->renderRecord();
 		}
@@ -251,6 +254,42 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		$markerArray['###BACKLINK###'] = $this->cObj->typoLink($this->pi_getLL('backlink'), array('parameter'=>$this->listPid));
 		
 		return $this->cObj->substituteMarkerArray($this->recordtemplate, $markerArray);
+	}
+	
+	/**
+	 * Build the WHERE Statement responsible for correct language handling
+	 * Taken from tt_news
+	 * 
+	 * @return string WHERE statement 
+	 */
+	function getLanguageWhere() {
+		$where = '';
+		$sys_language_content = $GLOBALS['TSFE']->sys_language_content;
+		if ($this->sys_language_mode == 'strict' && $sys_language_content) {
+			// sys_language_mode == 'strict': If a certain language is requested, select only news-records from the default
+			// language which have a translation. The translated articles will be overlayed later in the list or single function.
+			$tmpres = $this->exec_getQuery('tx_multicatalog_catalog', array(
+				'selectFields' => 'tx_multicatalog_catalog.l18n_parent',
+				'where' => 'tx_multicatalog_catalog.sys_language_uid = ' . $sys_language_content,
+				'pidInList' => $this->pids
+			));
+
+			$strictUids = array();
+			while (($tmprow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($tmpres))) {
+				$strictUids[] = $tmprow['l18n_parent'];
+			}
+			$strStrictUids = implode(',', $strictUids);
+			$where .= '(tt_news.uid IN (' . ($strStrictUids ? $strStrictUids : 0) . ') OR tt_news.sys_language_uid=-1)'; // sys_language_uid=-1 = [all languages]
+		} else {
+			// sys_language_mode NOT 'strict': If a certain language is requested, select only news-records in the default language.
+			// The translated articles (if they exist) will be overlayed later in the displayList or displaySingle function.
+			$where .= 'tt_news.sys_language_uid IN (0,-1)';
+		}
+
+		if ($this->conf['showNewsWithoutDefaultTranslation']) {
+			$where = '(' . $where . ' OR (tt_news.sys_language_uid=' . $sys_language_content . ' AND NOT tt_news.l18n_parent))';
+		}
+		return ' AND ' . $where;
 	}
 }
 
