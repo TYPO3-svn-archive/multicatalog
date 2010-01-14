@@ -126,13 +126,15 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		$markerArray = array();
 		
 		// render additional markers
-		foreach($this->conf[$this->view . '.']['additionalMarkers.'] as $marker => $markerCobj){
-			if($marker{strlen($marker)-1} != '.'){
-				$this->record[$marker] = $this->cObj->cObjGetSingle($markerCobj, $this->conf[$this->view . '.']['additionalMarkers.'][$marker . '.']);
+		if(is_array($this->conf[$this->view . '.']['additionalMarkers.'])) {
+			foreach($this->conf[$this->view . '.']['additionalMarkers.'] as $marker => $markerCobj) {
+				if($marker{strlen($marker)-1} != '.') {
+					$this->record[$marker] = $this->cObj->cObjGetSingle($markerCobj, $this->conf[$this->view . '.']['additionalMarkers.'][$marker . '.']);
+				}
 			}
 		}
 		
-		foreach($this->record as $field => $value){
+		foreach($this->record as $field => $value) {
 			
 			// ###PRICE###
 			if ($field == 'price') {
