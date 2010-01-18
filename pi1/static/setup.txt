@@ -1,3 +1,64 @@
 plugin.tx_multicatalog_pi1 {
 	template = EXT:multicatalog/pi1/res/template.html
+	
+	list{
+	
+	  ###BACKLINK###
+	  additionalMarkers{
+	    backlink = TEXT
+	    backlink.data = LLL:EXT:multicatalog/pi1/locallang.xml:backlink
+	  }
+	  backlink{
+	    backlink = 1
+	    wrap = <span class="backlink">|<span>
+	  }
+	  
+	  ###MORELINK###
+	  additionalMarkers{
+	    morelink = TEXT
+	    morelink.data = LLL:EXT:multicatalog/pi1/locallang.xml:morelink
+	  }
+	  morelink{
+	    link = 1
+	    wrap = <span class="morelink">|<span>
+	  }
+	  
+	  ###PICTURES###
+	  pictures.cObject < tt_content.image.20
+	  pictures.cObject{
+	    imgList.field = pictures
+	    imgPath = uploads/tx_multicatalog/
+	    imgObjNum = 1
+	    1{
+	      file.import.current = 1
+	      file.width = 200
+	      altText >
+	      altText.field = title
+	      altText := replaceString('"','&quot;')
+	      titleText < .altText
+	    }
+	    maxW = 200
+	    textPos = 0
+	  }
+	  
+	  ###FIRST_PICTURE###
+	  additionalMarkers{
+	    first_picture = IMAGE
+	    first_picture{
+	      file{
+	        import{
+	          field = pictures
+	          listNum = 0
+	          wrap = uploads/tx_multicatalog/|
+	        }
+	        width = 120
+	      }
+	    }
+	  }
+	  first_picture.link = 1
+	  
+	}
+	
+	single  < .list
+	
 }

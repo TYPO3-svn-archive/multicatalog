@@ -6,12 +6,22 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="ff_view">View</label>
+			<label index="ff_view.single">Single</label>
+			<label index="ff_view.list">List</label>
+			<label index="ff_singlePid">Single Page</label>
+			<label index="ff_listPid">List Page</label>
+			<label index="backlink">Back to List</label>
+			<label index="morelink">more</label>
+		</languageKey>
+		<languageKey index="default" type="array">
 			<label index="ff_view">Ansicht</label>
 			<label index="ff_view.single">Single</label>
 			<label index="ff_view.list">List</label>
 			<label index="ff_singlePid">Single Page</label>
 			<label index="ff_listPid">List Page</label>
 			<label index="backlink">Zur Listenansicht</label>
+			<label index="morelink">mehr</label>
 		</languageKey>
 	</data>
 </T3locallang>
