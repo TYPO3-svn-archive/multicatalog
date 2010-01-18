@@ -28,10 +28,10 @@
  *
  *   51: class tx_multicatalog_pi1 extends tslib_pibase
  *   66:     function main($content, $conf)
- *   98:     function pi_wrapInBaseClass($str)
- *  109:     function singleView()
- *  134:     function listView()
- *  210:     function renderRecord()
+ *   99:     function singleView()
+ *  128:     function listView()
+ *  203:     function renderRecord()
+ *  296:     function pi_wrapInBaseClass($str)
  *
  * TOTAL FUNCTIONS: 5
  * (This index is automatically created/updated by the extension "extdeveval")
@@ -90,17 +90,6 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	}
 
 	/**
-	 * Custom implementation of tslib_pibase::pi_wrapInBaseClass
-	 * Adds the current view as class
-	 *
-	 * @param	string		Content to Wrap
-	 * @return	string		Content wrapped by div with Plugin Classes
-	 */
-	function pi_wrapInBaseClass($str){
-		return '<div class="'.str_replace('_','-',$this->prefixId).' '.str_replace('_','-',$this->prefixId).'-'.$this->view.'">' . $str . '</div>';
-	}
-
-	/**
 	 * Single View
 	 * Makes a 301 redirect if no valid record for single view is available.
 	 * Uses $this->renderRecord() to get the Content of the single record
@@ -114,7 +103,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			'###RECORD_SINGLE###'
 		);
 
-		$where = 
+		$where =
 			'uid = ' . intval($this->piVars['uid']) . ' AND ' .
 			'sys_language_uid = ' . intval($GLOBALS['TSFE']->sys_language_content) .
 			$this->cObj->enableFields('tx_multicatalog_catalog');
@@ -236,7 +225,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				$this->conf[$this->view . '.'][$field . '.']['typolink.']['parameter'] = $this->singlePid;
 				$this->conf[$this->view . '.'][$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[uid]=' . $this->record['uid'];
 			}
-			
+
 			// backlink if value.backlink = 1
 			if($this->conf[$this->view . '.'][$field . '.']['backlink'] == 1){
 				$this->conf[$this->view . '.'][$field . '.']['typolink.']['parameter'] = $this->listPid;
@@ -255,7 +244,8 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$markerArray['###ARTICLES###'] = '';
 			$articles = array();
 			$i = 0;
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_article', 'irre_parentid = '.$this->record['uid'], '', 'sorting ASC');
+			$where = 'irre_parentid = ' . $this->record['uid'] . $this->cObj->enableFields('tx_multicatalog_article');
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_article', $where, '', 'sorting ASC');
 			while($article = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 
 				// Fill cObj with article fields, product fields (prefixed with "product_") and the iteration number
@@ -266,9 +256,11 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				$this->cObj->data['i'] = $i;
 
 					// render additional markers
-				foreach($this->conf[$this->view . '.']['articles.']['additionalMarkers.'] as $marker => $markerCobj){
-					if($marker{strlen($marker)-1} != '.'){
-						$article[$marker] = $this->cObj->cObjGetSingle($markerCobj, $this->conf[$this->view . '.']['articles.']['additionalMarkers.'][$marker . '.']);
+				if(is_array($this->conf[$this->view . '.']['articles.']['additionalMarkers.'])) {
+					foreach($this->conf[$this->view . '.']['articles.']['additionalMarkers.'] as $marker => $markerCobj) {
+						if($marker{strlen($marker)-1} != '.'){
+							$article[$marker] = $this->cObj->cObjGetSingle($markerCobj, $this->conf[$this->view . '.']['articles.']['additionalMarkers.'][$marker . '.']);
+						}
 					}
 				}
 
@@ -283,7 +275,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 					// stdWrap for each value
 					$subMarkerArray['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap(
 						$value,
-						$this->conf[$this->view.'.']['articles.'][$field.'.']
+						$this->conf[$this->view.'.']['articles.'][$field . '.']
 					);
 				}
 				$markerArray['###ARTICLES###'] .= $this->cObj->substituteMarkerArrayCached($this->articletemplate, $subMarkerArray);
@@ -292,6 +284,17 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		}
 
 		return $this->cObj->substituteMarkerArray($this->recordtemplate, $markerArray);
+	}
+
+	/**
+	 * Custom implementation of tslib_pibase::pi_wrapInBaseClass
+	 * Adds the current view as class
+	 *
+	 * @param	string		Content to Wrap
+	 * @return	string		Content wrapped by div with Plugin Classes
+	 */
+	function pi_wrapInBaseClass($str){
+		return '<div class="'.str_replace('_','-',$this->prefixId).' '.str_replace('_','-',$this->prefixId).'-'.$this->view.'">' . $str . '</div>';
 	}
 
 }
