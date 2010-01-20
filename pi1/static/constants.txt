@@ -1,0 +1,4 @@
+plugin.tx_multicatalog_pi1{
+	#cat=Multicatalog/links/s; type=int; label= Storage Pid:Where your products reside
+	storagePid = 
+}

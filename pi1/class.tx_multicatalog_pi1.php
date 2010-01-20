@@ -74,7 +74,20 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		$this->view = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'view', 'sDEF');
 		$this->listPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'listPid', 'sDEF');
 		$this->singlePid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'singlePid', 'sDEF');
-		$this->pids = $this->pi_getPidList($this->cObj->data['pages'],$this->cObj->data['recursive']); // storage
+		
+		/**
+		 * Storage Pid
+		 * Priority:
+		 * 1. Pages set in the plugin flexform
+		 * 2. Page set via TS
+		 * 3. Current FE Pid
+		 */
+		$this->pids = $this->cObj->data['pages'] ?
+			$this->pi_getPidList($this->cObj->data['pages'],$this->cObj->data['recursive']) :
+			( $this->conf['storagePid'] ?
+				$this->conf['storagePids'] :
+				$GLOBALS['TSFE']->id );
+			
 
 		$this->template = $this->cObj->fileResource($this->conf['template']);
 		$this->articletemplate = $this->cObj->getSubpart($this->template, '###ARTICLE###');

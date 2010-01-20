@@ -30,7 +30,7 @@ $TCA['tx_multicatalog_catalog'] = array (
 );
 
 $_EXTCONF = unserialize($_EXTCONF);
-if($_EXTCONF['use_articles']){
+if($_EXTCONF['use_articles'] || TYPO3_MODE != 'BE'){
 	
 	$TCA['tx_multicatalog_article'] = array (
 		'ctrl' => array (
