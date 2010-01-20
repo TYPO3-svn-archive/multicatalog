@@ -85,7 +85,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		$this->pids = $this->cObj->data['pages'] ?
 			$this->pi_getPidList($this->cObj->data['pages'],$this->cObj->data['recursive']) :
 			( $this->conf['storagePid'] ?
-				$this->conf['storagePids'] :
+				$this->conf['storagePid'] :
 				$GLOBALS['TSFE']->id );
 			
 
