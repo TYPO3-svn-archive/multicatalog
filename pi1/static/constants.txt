@@ -7,4 +7,6 @@ plugin.tx_multicatalog_pi1{
 	singlePid =
 	#cat=Multicatalog/file/t; type=string; label=Template File
 	templateFile = EXT:multicatalog/pi1/res/template.html
+	#cat=Multicatalog/enable/l; type=boolean; label= Enable Lightbox?: Needs EXT:perfectlightbox running
+	enableLightbox = 0
 }

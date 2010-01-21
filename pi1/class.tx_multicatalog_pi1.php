@@ -220,12 +220,13 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 * @return	string		The rendered record is given back to singleView() or listView()
 	 */
 	function renderRecord($record, $fieldsConf, $template){
-		$this->cObj->data = $record;
 		$markerArray = array();
 
 		foreach($record as $field => $value) {
 			$fieldsConf[$field] = $value;
 		}
+		
+		$this->cObj->data = $fieldsConf;
 		
 		// render TS fields setup
 		foreach($fieldsConf as $field => $value) {
