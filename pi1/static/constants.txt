@@ -1,4 +1,10 @@
 plugin.tx_multicatalog_pi1{
-	#cat=Multicatalog/links/s; type=int; label= Storage Pid:Where your products reside
+	#cat=Multicatalog/links/st; type=int; label=Storage Pid:Where your products reside
 	storagePid = 
+	#cat=Multicatalog/links/l; type=int; label=List Pid:Page with list view
+	listPid = 
+	#cat=Multicatalog/links/si; type=int; label=Single Pid:Page with single view
+	singlePid =
+	#cat=Multicatalog/file/t; type=string; label=Template File
+	templateFile = EXT:multicatalog/pi1/res/template.html
 }

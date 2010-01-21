@@ -72,8 +72,12 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		$this->pi_initPIflexForm();
 
 		$this->view = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'view', 'sDEF');
-		$this->listPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'listPid', 'sDEF');
-		$this->singlePid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'singlePid', 'sDEF');
+		
+		$ff_listPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'listPid', 'sDEF');
+		$this->listPid = $ff_listPid ? $ff_listPid : $this->conf['listPid'];
+		
+		$ff_singlePid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'singlePid', 'sDEF');
+		$this->singlePid = $ff_singlePid ? $ff_singlePid : $this->conf['singlePid'];
 		
 		/**
 		 * Storage Pid
