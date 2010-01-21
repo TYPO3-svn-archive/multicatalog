@@ -10,7 +10,7 @@
 			<label index="tx_multicatalog_article.code">Code</label>
 			<label index="tx_multicatalog_article.title">Title</label>
 			<label index="tx_multicatalog_article.price">Price</label>
-			<label index="tx_multicatalog_catalog">Catalog</label>
+			<label index="tx_multicatalog_catalog">Product</label>
 			<label index="tx_multicatalog_catalog.code">Code</label>
 			<label index="tx_multicatalog_catalog.title">Title</label>
 			<label index="tx_multicatalog_catalog.description">Description</label>
