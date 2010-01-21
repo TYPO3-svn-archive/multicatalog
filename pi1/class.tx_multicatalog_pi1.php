@@ -183,34 +183,32 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 *
 	 * stdWrap for all fields/markers:
 	 * ===============================
-	 * For all fields and additional markers (see below) stdWrap properties are available. Just use the property named
-	 * like your field. Example:
-	 * plugin.tx_multicatalog_pi1.list{
+	 * For all fields and additional markers (see below) stdWrap properties are available. Inside "fields." just use
+	 * the property named like your field. Example:
+	 * plugin.tx_multicatalog_pi1.fields{
 	 *   description{
 	 *     crop = 160 | ... | 1
 	 *     stripHtml = 1
 	 *   }
 	 * }
-	 * If you work with articles, their fields are available below plugin.tx_multicatalog_pi1.[single/list].articles
+	 * If you work with articles, their fields are available below plugin.tx_multicatalog_pi1..articlefields
 	 *
 	 * Other TS properties:
 	 * ====================
-	 * For all fields and additional markers (see below) a .link property is available which links the content to the
-	 * single view. Example: see "Add custom markers"
-	 * If you work with articles, their fields are available below plugin.tx_multicatalog_pi1.[single/list].articles
+	 * For all fields and additional markers (see below) a ".link" property is available which links the content to the
+	 * single view. And a "backlink" property is available which links the content to the list view.
+	 * Example: see "Add custom markers"
 	 *
 	 * Add custom markers:
 	 * ===================
 	 * You can also add markers via TS. Here's an example to add a "more" link to the list view:
-	 * plugin.tx_multicatalog_pi1.list{
-	 *   additionalMarkers{
-	 *     morelink = TEXT
-	 *     morelink.value = more
-	 *   }
+	 * plugin.tx_multicatalog_pi1.fields{
+	 *   morelink = more
 	 *   morelink.link = 1
 	 *   morelink.wrap = <span class="morelink">|</span>
 	 * }
-	 * If you work with articles, you can add fields below plugin.tx_multicatalog_pi1.[single/list].articles.additionalMarkers
+	 * Every field you mention in your TS Setup will be available as Marker.
+	 * If you work with articles, you can add fields below plugin.tx_multicatalog_pi1.articlefields
 	 *
 	 * The default TS (EXT:multicatalog/pi1/static/setup.txt) shows some examples of how to work with this extension
 	 * and introduces the markers ###BACKLINK###, ###MORELINK### and ###FIRST_PICTURE### and configures ###PICTURES###
