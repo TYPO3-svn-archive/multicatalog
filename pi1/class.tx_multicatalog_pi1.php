@@ -125,13 +125,13 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			'sys_language_uid = ' . intval($GLOBALS['TSFE']->sys_language_content) .
 			$this->cObj->enableFields('tx_multicatalog_catalog');
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_catalog', $where);
-		$this->record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-		if(!$this->record['uid']) {
+		$record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		if(!$record['uid']) {
 			header('HTTP/1.1 301 Moved Permanently');
 			header('Location: ' . t3lib_div::locationHeaderUrl($this->cObj->getTypoLink_URL($this->listPid)));
 			header('Connection: close');
 		}
-		$content = $this->renderRecord();
+		$content = $this->renderRecord($record, $this->conf['fields.'], $this->recordtemplate);
 		return $content;
 
 	}
@@ -157,8 +157,8 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$this->cObj->enableFields('tx_multicatalog_catalog');
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_catalog', $where, '', 'sorting ASC');
-		while($this->record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
-			$markerArray['###RECORDS###'] .= $this->renderRecord();
+		while($record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
+			$markerArray['###RECORDS###'] .= $this->renderRecord($record, $this->conf['fields.'], $this->recordtemplate);
 		}
 
 		return $this->cObj->substituteMarkerArray(
@@ -215,92 +215,72 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 * The default TS (EXT:multicatalog/pi1/static/setup.txt) shows some examples of how to work with this extension
 	 * and introduces the markers ###BACKLINK###, ###MORELINK### and ###FIRST_PICTURE### and configures ###PICTURES###
 	 *
+	 * @param	array		The record to render
+	 * @param	array		TS Setup of the record fields
 	 * @return	string		The rendered record is given back to singleView() or listView()
 	 */
-	function renderRecord(){
-		$this->cObj->data = $this->record;
+	function renderRecord($record, $fieldsConf, $template){
+		$this->cObj->data = $record;
 		$markerArray = array();
 
-		// render additional markers
-		if(is_array($this->conf[$this->view . '.']['additionalMarkers.'])) {
-			foreach($this->conf[$this->view . '.']['additionalMarkers.'] as $marker => $markerCobj) {
-				if($marker{strlen($marker)-1} != '.') {
-					$this->record[$marker] = $this->cObj->cObjGetSingle($markerCobj, $this->conf[$this->view . '.']['additionalMarkers.'][$marker . '.']);
-				}
-			}
+		foreach($record as $field => $value) {
+			$fieldsConf[$field] = $value;
 		}
-
-		foreach($this->record as $field => $value) {
-
-			// ###PRICE###
-			if ($field == 'price') {
-				$value = number_format($value, 2, ',', '.');
+		
+		// render TS fields setup
+		foreach($fieldsConf as $field => $value) {
+			// [property.] => [property] if [property] is not defined
+			if($field{strlen($field)-1} == '.' && !$fieldsConf[substr($field, 0, strlen($field)-1)]) {
+				$field = substr($field, 0, strlen($field)-1);
 			}
-
-			// link if value.link = 1
-			if($this->conf[$this->view . '.'][$field . '.']['link'] == 1){
-				$this->conf[$this->view . '.'][$field . '.']['typolink.']['parameter'] = $this->singlePid;
-				$this->conf[$this->view . '.'][$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[uid]=' . $this->record['uid'];
+			if($field{strlen($field)-1} != '.') {
+				
+				// ###PRICE###
+				if ($field == 'price') {
+					$value = number_format($value, 2, ',', '.');
+				}
+				
+				// link if value.link = 1
+				if($fieldsConf[$field . '.']['link'] == 1){
+					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->singlePid;
+					$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[uid]=' . $record['uid'];
+				}
+	
+				// backlink if value.backlink = 1
+				if($fieldsConf[$field . '.']['backlink'] == 1){
+					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->listPid;
+				}
+				
+				$markerArray['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap(
+					$value,
+					$fieldsConf[$field . '.']
+				);
 			}
-
-			// backlink if value.backlink = 1
-			if($this->conf[$this->view . '.'][$field . '.']['backlink'] == 1){
-				$this->conf[$this->view . '.'][$field . '.']['typolink.']['parameter'] = $this->listPid;
-			}
-
-			// stdWrap for each value
-			$markerArray['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap(
-				$value,
-				$this->conf[$this->view . '.'][$field . '.']
-			);
-
 		}
 
 		// Articles
-		if ($this->record['articles']) {
+		if ($record['articles']) {
+			
 			$markerArray['###ARTICLES###'] = '';
 			$articles = array();
 			$i = 0;
-			$where = 'irre_parentid = ' . $this->record['uid'] . $this->cObj->enableFields('tx_multicatalog_article');
+			$where = 'irre_parentid = ' . $record['uid'] . $this->cObj->enableFields('tx_multicatalog_article');
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_article', $where, '', 'sorting ASC');
-			while($article = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
-
-				// Fill cObj with article fields, product fields (prefixed with "product_") and the iteration number
+			while($article = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				
+				// Fill cObj with article fields, product fields (prefixed with "parent_") and the iteration number
 				$this->cObj->data = $article;
-				foreach($this->record as $field => $value){
-					$this->cObj->data['product_'.$field] = $value;
+				foreach($record as $field => $value){
+					$this->cObj->data['parent_'.$field] = $value;
 				}
 				$this->cObj->data['i'] = $i;
-
-					// render additional markers
-				if(is_array($this->conf[$this->view . '.']['articles.']['additionalMarkers.'])) {
-					foreach($this->conf[$this->view . '.']['articles.']['additionalMarkers.'] as $marker => $markerCobj) {
-						if($marker{strlen($marker)-1} != '.'){
-							$article[$marker] = $this->cObj->cObjGetSingle($markerCobj, $this->conf[$this->view . '.']['articles.']['additionalMarkers.'][$marker . '.']);
-						}
-					}
-				}
-
-				$subMarkerArray = array();
-				foreach($article as $field => $value) {
-
-					// ###PRICE###
-					if ($field == 'price') {
-						$value = number_format($value, 2, ',', '.');
-					}
-
-					// stdWrap for each value
-					$subMarkerArray['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap(
-						$value,
-						$this->conf[$this->view.'.']['articles.'][$field . '.']
-					);
-				}
-				$markerArray['###ARTICLES###'] .= $this->cObj->substituteMarkerArrayCached($this->articletemplate, $subMarkerArray);
-				$i++;
+				
+				$markerArray['###ARTICLES###'] .= $this->renderRecord($article, $this->conf['articlefields.'], $this->articletemplate);
+				
 			}
 		}
 
-		return $this->cObj->substituteMarkerArray($this->recordtemplate, $markerArray);
+		return $this->cObj->substituteMarkerArray($template, $markerArray);
 	}
 
 	/**

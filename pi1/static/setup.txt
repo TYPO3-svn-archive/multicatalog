@@ -1,26 +1,38 @@
 plugin.tx_multicatalog_pi1 {
+
 	template = {$plugin.tx_multicatalog_pi1.templateFile}
 	storagePid = {$plugin.tx_multicatalog_pi1.storagePid}
 	listPid = {$plugin.tx_multicatalog_pi1.listPid}
 	singlePid = {$plugin.tx_multicatalog_pi1.singlePid}
-	list{
+	
+	fields{
 	
 	  ###BACKLINK###
-	  additionalMarkers{
-	    backlink = TEXT
-	    backlink.data = LLL:EXT:multicatalog/pi1/locallang.xml:backlink
-	  }
 	  backlink{
 	    backlink = 1
-	    wrap = <span class="backlink">|<span>
+	    data = LLL:EXT:multicatalog/pi1/locallang.xml:backlink
+	    wrap = <span class="backlink">|</span>
 	  }
 	  
-	  ###MORELINK###
-	  additionalMarkers{
-	    morelink = TEXT
-	    morelink.data = LLL:EXT:multicatalog/pi1/locallang.xml:morelink
+	  ###FIRST_PICTURE###
+	  first_picture{
+	    cObject = IMAGE
+	    cObject{
+	      file{
+	        import{
+	          field = pictures
+	          listNum = 0
+	          wrap = uploads/tx_multicatalog/|
+	        }
+	        width = 120
+	      }
+		}
+		link = 1
 	  }
+	  
+	  ###MORELINK
 	  morelink{
+	    data = LLL:EXT:multicatalog/pi1/locallang.xml:morelink
 	    link = 1
 	    wrap = <span class="morelink">|<span>
 	  }
@@ -42,32 +54,19 @@ plugin.tx_multicatalog_pi1 {
 	    maxW = 200
 	    textPos = 0
 	  }
-	  
-	  ###FIRST_PICTURE###
-	  additionalMarkers{
-	    first_picture = IMAGE
-	    first_picture{
-	      file{
-	        import{
-	          field = pictures
-	          listNum = 0
-	          wrap = uploads/tx_multicatalog/|
-	        }
-	        width = 120
-	      }
-	    }
-	  }
-	  first_picture.link = 1
-	  
 	}
 	
-	single  < .list
+	list{
+	}
+	
+	single{
+	}
 	
 }
 
 # Lightbox
 [globalVar = LIT:1 = {$plugin.perfectlightbox.enableGlobally}]
-plugin.tx_multicatalog_pi1.list.pictures.cObject.1{
+plugin.tx_multicatalog_pi1.fields.pictures.cObject.1{
   imageLinkWrap{
     enable >
     enable = 1
