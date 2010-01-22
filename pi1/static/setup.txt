@@ -67,14 +67,24 @@ plugin.tx_multicatalog_pi1 {
 # Lightbox
 [globalVar = LIT:1 = {$plugin.tx_multicatalog_pi1.enableLightbox}]
 plugin.tx_multicatalog_pi1.fields.tx_perfectlightbox_activate = 1
+plugin.tx_multicatalog_pi1.fields.tx_perfectlightbox_imageset = 1
 plugin.tx_multicatalog_pi1.fields.pictures.cObject.1.imageLinkWrap >
 plugin.tx_multicatalog_pi1.fields.pictures.cObject.1.imageLinkWrap = 1
 plugin.tx_multicatalog_pi1.fields.pictures.cObject.1.imageLinkWrap{
   enable = 1
   typolink{
-    parameter.field = pictures
-    parameter.listNum.stdWrap.data = register : IMAGE_NUM_CURRENT
-    parameter.wrap = uploads/tx_multicatalog/|
+    parameter.cObject = IMG_RESOURCE
+    parameter.cObject{
+      file{
+        import{
+          field = pictures
+          listNum.stdWrap.data = register: IMAGE_NUM_CURRENT
+          wrap = uploads/tx_multicatalog/|
+        }
+        width = {$plugin.perfectlightbox.lightBoxMaxW}
+      }
+      
+    }
     userFunc = tx_perfectlightbox->main
   }
 }
