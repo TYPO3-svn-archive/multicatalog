@@ -1,12 +1,12 @@
 plugin.tx_multicatalog_pi1{
-	#cat=Multicatalog/links/st; type=int; label=Storage Pid:Where your products reside
+	#cat=Multicatalog/links/st; type=int; label=LLL:EXT:multicatalog/locallang.xml:constants.storagePid
 	storagePid = 
-	#cat=Multicatalog/links/l; type=int; label=List Pid:Page with list view
+	#cat=Multicatalog/links/l; type=int; label=LLL:EXT:multicatalog/locallang.xml:constants.listPid
 	listPid = 
-	#cat=Multicatalog/links/si; type=int; label=Single Pid:Page with single view
+	#cat=Multicatalog/links/si; type=int; label=LLL:EXT:multicatalog/locallang.xml:constants.singlePid
 	singlePid =
-	#cat=Multicatalog/file/t; type=string; label=Template File
+	#cat=Multicatalog/file/t; type=string; label=LLL:EXT:multicatalog/locallang.xml:constants.templateFile
 	templateFile = EXT:multicatalog/pi1/res/template.html
-	#cat=Multicatalog/enable/l; type=boolean; label= Enable Lightbox?: Needs EXT:perfectlightbox running
+	#cat=Multicatalog/enable/l; type=boolean; label=LLL:EXT:multicatalog/locallang.xml:constants.enableLightbox
 	enableLightbox = 0
 }

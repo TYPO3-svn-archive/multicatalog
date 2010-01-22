@@ -8,12 +8,22 @@
 		<languageKey index="default" type="array">
 			<label index="pi1_title">Product catalog</label>
 			<label index="pi1_plus_wiz_description">Add a Product Catalog to your page.</label>
+			<label index="constants.enableLightbox">Enable Lightbox?: Needs EXT:perfectlightbox</label>
+			<label index="constants.listPid">List Pid:Page with list view</label>
+			<label index="constants.singlePid">Single Pid:Page with single view</label>
+			<label index="constants.storagePid">Storage Pid:Where your products reside</label>
+			<label index="constants.templateFile">Template File</label>
 			<label index="ext_conf.use_articles">Use Articles: For different sizes, colors, packaging units etc.</label>
 			<label index="ext_conf.teaser_rte">RTE for Teaser: If enabled product teasers can be edited using an RTE</label>
 		</languageKey>
-		<languageKey index="default" type="array">
+		<languageKey index="de" type="array">
 			<label index="pi1_title">Produktkatalog</label>
 			<label index="pi1_plus_wiz_description">Add a Product Catalog to your page.</label>
+			<label index="constants.enableLightbox">Lightbox aktivieren?: Benötigt EXT:perfectlightbox</label>
+			<label index="constants.listPid">Pid Listenansicht:Seite mit der Listenansicht</label>
+			<label index="constants.singlePid">Pid Einzelansicht:Seite mit der Einzelansicht</label>
+			<label index="constants.storagePid">Storage Pid:Seite auf der die Datensätze liegen</label>
+			<label index="constants.templateFile">Template-Datei</label>
 			<label index="ext_conf.use_articles">Artikel verwenden: Für verschiedene Größen, Farben, Verpackungseinheiten etc.</label>
 			<label index="ext_conf.teaser_rte">RTE für Kurzbeschreibung: Kurzbeschreibungen können mit einem RTE bearbeitet werden.</label>
 		</languageKey>
