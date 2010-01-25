@@ -157,7 +157,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$this->cObj->enableFields('tx_multicatalog_catalog');
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_catalog', $where, '', 'sorting ASC');
-		while($record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
+		while($record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$markerArray['###RECORDS###'] .= $this->renderRecord($record, $this->conf['fields.'], $this->recordtemplate);
 		}
 
@@ -215,6 +215,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 *
 	 * @param	array		The record to render
 	 * @param	array		TS Setup of the record fields
+	 * @param	string		Template for this record
 	 * @return	string		The rendered record is given back to singleView() or listView()
 	 */
 	function renderRecord($record, $fieldsConf, $template){
