@@ -241,13 +241,14 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				}
 				
 				// link if value.link = 1
-				if($fieldsConf[$field . '.']['link'] == 1){
+				if($fieldsConf[$field . '.']['link'] == 1) {
 					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->singlePid;
 					$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[uid]=' . $record['uid'];
+					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = true;
 				}
 	
 				// backlink if value.backlink = 1
-				if($fieldsConf[$field . '.']['backlink'] == 1){
+				if($fieldsConf[$field . '.']['backlink'] == 1) {
 					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->listPid;
 				}
 				
@@ -270,8 +271,8 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				
 				// Fill cObj with article fields, product fields (prefixed with "parent_") and the iteration number
 				$this->cObj->data = $article;
-				foreach($record as $field => $value){
-					$this->cObj->data['parent_'.$field] = $value;
+				foreach($record as $field => $value) {
+					$this->cObj->data['parent_' . $field] = $value;
 				}
 				$this->cObj->data['i'] = $i;
 				
@@ -291,7 +292,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 * @return	string		Content wrapped by div with Plugin Classes
 	 */
 	function pi_wrapInBaseClass($str){
-		return '<div class="'.str_replace('_','-',$this->prefixId).' '.str_replace('_','-',$this->prefixId).'-'.$this->view.'">' . $str . '</div>';
+		return '<div class="' . str_replace('_','-',$this->prefixId) . ' ' . str_replace('_','-',$this->prefixId) . '-' . $this->view . '">' . $str . '</div>';
 	}
 
 }

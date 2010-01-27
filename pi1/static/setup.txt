@@ -30,7 +30,7 @@ plugin.tx_multicatalog_pi1 {
 		link = 1
 	  }
 	  
-	  ###MORELINK
+	  ###MORELINK###
 	  morelink{
 	    data = LLL:EXT:multicatalog/pi1/locallang.xml:morelink
 	    link = 1
