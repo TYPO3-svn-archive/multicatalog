@@ -3,3 +3,6 @@ use_articles = 0
 
 # cat=basic; type=boolean; label=LLL:EXT:multicatalog/locallang.xml:ext_conf.teaser_rte
 teaser_rte = 0
+
+# cat=basic; type=boolean; label=LLL:EXT:multicatalog/locallang.xml:ext_conf.page_categories
+page_categories = 1
