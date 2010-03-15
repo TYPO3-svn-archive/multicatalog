@@ -18,8 +18,12 @@
 			<label index="tx_multicatalog_catalog.price">Price</label>
 			<label index="tx_multicatalog_catalog.teaser">Teaser</label>
 			<label index="tx_multicatalog_catalog.articles">Articles</label>
+			<label index="tx_multicatalog_catalog.category">Category</label>
 			<label index="tx_multicatalog_catalog.tabs.general">General</label>
 			<label index="tx_multicatalog_catalog.tabs.articles">Articles</label>
+			<label index="tx_multicatalog_category">Category</label>
+			<label index="tx_multicatalog_category.name">Name</label>
+			<label index="tx_multicatalog_category.category">Parent Category</label>
 			<label index="tt_content.list_type_pi1">Product Catalog</label>
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -35,8 +39,12 @@
 			<label index="tx_multicatalog_catalog.price">Preis</label>
 			<label index="tx_multicatalog_catalog.teaser">Kurzbeschreibung</label>
 			<label index="tx_multicatalog_catalog.articles">Artikel</label>
+			<label index="tx_multicatalog_catalog.category">Kategorie</label>
 			<label index="tx_multicatalog_catalog.tabs.general">Allgemein</label>
 			<label index="tx_multicatalog_catalog.tabs.articles">Artikel</label>
+			<label index="tx_multicatalog_category">Kategorie</label>
+			<label index="tx_multicatalog_category.name">Name</label>
+			<label index="tx_multicatalog_category.category">Übergeordnete Kategorie</label>
 			<label index="tt_content.list_type_pi1">Produktkatalog</label>
 		</languageKey>
 		<languageKey index="fr" type="array">

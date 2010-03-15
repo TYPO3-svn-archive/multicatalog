@@ -18,7 +18,7 @@ $TCA['tx_multicatalog_article'] = array (
 		),
 		'code' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.code',		
+			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_article.code',		
 			'config' => array (
 				'type' => 'input',	
 				'size' => '10',
@@ -27,7 +27,7 @@ $TCA['tx_multicatalog_article'] = array (
 		),
 		'title' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.title',		
+			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_article.title',		
 			'config' => array (
 				'type' => 'input',	
 				'size' => '30',	
@@ -36,7 +36,7 @@ $TCA['tx_multicatalog_article'] = array (
 		),
 		'price' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.price',		
+			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_article.price',		
 			'config' => array (
 				'type' => 'input',	
 				'size' => '5',

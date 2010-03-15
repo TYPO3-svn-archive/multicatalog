@@ -72,7 +72,8 @@ $TCA['tx_multicatalog_catalog'] = array (
         ),
         'l18n_diffsource' => Array(
             'config'=>array(
-                'type'=>'passthrough')
+                'type'=>'passthrough'
+       		)
         ),
 		'sys_language_uid' => Array (
             'exclude' => 1,
@@ -80,7 +81,7 @@ $TCA['tx_multicatalog_catalog'] = array (
             'config' => Array (
                 'type' => 'select',
                 'foreign_table' => 'sys_language',
-                'foreign_table_where' => 'ORDER BY sys_language.title',
+                'foreign_table_where' => 'AND hidden = 0 ORDER BY sys_language.title',
                 'items' => Array(
                     Array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages',-1),
                     Array('LLL:EXT:lang/locallang_general.php:LGL.default_value',0)
@@ -206,7 +207,27 @@ if($_EXTCONF['use_articles']){
 	);
 	t3lib_div::loadTCA('tx_multicatalog_catalog');
 	t3lib_extMgm::addTCAcolumns('tx_multicatalog_catalog',$tempColumns,1);
-	t3lib_extMgm::addToAllTCAtypes('tx_multicatalog_catalog','--div--;LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.tabs.articles,articles', '', 'after:price');
+	t3lib_extMgm::addToAllTCAtypes('tx_multicatalog_catalog', '--div--;LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.tabs.articles,articles', '', 'after:price');
+}
+if($_EXTCONF['category_records']) {
+	$tempColumns = array (
+		'category' => array (		
+			'exclude' => 0,		
+			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.category',		
+			'config' => array (
+				'type' => 'select',	
+				// TODO: Implement user func to display oiginal language id's but current language labels
+				'foreign_table' => 'tx_multicatalog_category',    
+                'foreign_table_where' => 'AND tx_multicatalog_category.pid=###CURRENT_PID### AND sys_language_uid = 0 ORDER BY tx_multicatalog_category.name',    
+                'size' => 1,    
+                'minitems' => 0,
+                'maxitems' => 1,
+			)
+		),
+	);
+	t3lib_div::loadTCA('tx_multicatalog_catalog');
+	t3lib_extMgm::addTCAcolumns('tx_multicatalog_catalog',$tempColumns,1);
+	t3lib_extMgm::addToAllTCAtypes('tx_multicatalog_catalog', 'category', '', 'before:code');
 }
 // Add teaser (RTE or plain)
 $teaser = 'teaser';

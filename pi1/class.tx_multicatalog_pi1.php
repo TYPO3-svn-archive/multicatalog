@@ -53,9 +53,34 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	var $scriptRelPath = 'pi1/class.tx_multicatalog_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey        = 'multicatalog';	// The extension key.
 	var $pi_checkCHash = true;
+	var $linkVarName   = 'uid';
 
+	private $markerLLs;
+	
 	private $uploadFolder = 'uploads/tx_multicatalog/';
 
+	/**
+      * @var integer x pages before and after active page will be shown
+      */
+     private $pageSchemeAroundAct = 2;
+
+     /**
+      * @var integer Each xth page will be shown in the pagebrowser
+      */
+     private $pageSchemeEach = 10;
+
+     /**
+      * @var integer First x pages will be shown in the pagebrowser
+      */
+     private $pageSchemeFirst = 5;
+
+     /**
+      * @var integer Last x pages will be shown in the pagebrowser
+      */
+     private $pageSchemeLast = 3;
+	
+	
+	
 	/**
 	 * Main method of your PlugIn
 	 *
@@ -95,11 +120,18 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 
 		$this->template = $this->cObj->fileResource($this->conf['template']);
 		$this->articletemplate = $this->cObj->getSubpart($this->template, '###ARTICLE###');
+		$this->categorytemplate = $this->cObj->getSubpart($this->template, '###CATEGORY_LIST###');
 
-		if($this->view == 'single'){
+		if($this->view == 'single') {
+			$this->linkTargetPid = $this->singlePid;
 			$content = $this->singleView();
-		}else{
+		} elseif($this->view == 'catmenu') {
+			$this->linkVarName = 'cat';
+			$this->linkTargetPid = $this->listPid;
+			$content = $this->catMenuView();
+		} else {
 			$this->view = 'list';
+			$this->linkTargetPid = $this->singlePid;
 			$content = $this->listView();
 		}
 
@@ -107,8 +139,52 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	}
 
 	/**
+	 * Extends the pi_loadLL function of tslib_pibase.
+	 * Fills $this->markerLLs with the labels of the current language and adds labels from other files given in
+	 * $this->conf['includeLL.'] array.
+	 * All included labels are available as markers in the template
+	 */
+	function pi_loadLL() {
+		parent::pi_loadLL();
+		$this->markerLLs = array();
+		foreach($this->LOCAL_LANG['default'] as $key => $value) {
+			$this->markerLLs[$key] = $value;
+		}
+		foreach($this->LOCAL_LANG[$this->LLkey] as $key => $value) {
+			$this->markerLLs[$key] = $value;
+		}
+		foreach($this->conf['includeLL.'] as $LLFile) {
+			$ll = t3lib_div::readLLfile($LLFile,$this->LLkey,$GLOBALS['TSFE']->renderCharset);
+			if(is_array($ll[$this->LLkey])) {
+				$this->markerLLs = t3lib_div::array_merge_recursive_overrule($this->markerLLs, $ll['default']);
+				$this->markerLLs = t3lib_div::array_merge_recursive_overrule($this->markerLLs, $ll[$this->LLkey]);
+			}
+		}
+	}
+	
+	function fetchLocalized($returnArray, $fields, $table, $where, $groupBy='', $orderBy='', $limit='') {
+		
+		$records = array();
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where . ' AND sys_language_uid = 0', $groupBy, $orderBy, $limit);
+		while($record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			if(!$record['uid']) {
+			header('HTTP/1.1 301 Moved Permanently');
+			header('Location: ' . t3lib_div::locationHeaderUrl($this->cObj->getTypoLink_URL($this->listPid)));
+			header('Connection: close');
+			}
+			if($GLOBALS['TSFE']->sys_language_uid > 0) {
+				$record = $GLOBALS['TSFE']->sys_page->getRecordOverlay($table, $record, $GLOBALS['TSFE']->sys_language_uid);
+			}
+			if(!$returnArray) {
+				return $record;
+			}
+			$records[] = $record;	
+		}
+		return $records;
+	}
+	
+	/**
 	 * Single View
-	 * Makes a 301 redirect if no valid record for single view is available.
 	 * Uses $this->renderRecord() to get the Content of the single record
 	 *
 	 * @return	string		The Rendered View, ready for output
@@ -120,22 +196,12 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			'###RECORD_SINGLE###'
 		);
 
-		$where =
-			'uid = ' . intval($this->piVars['uid']) . ' AND ' .
-			'sys_language_uid = ' . intval($GLOBALS['TSFE']->sys_language_content) .
-			$this->cObj->enableFields('tx_multicatalog_catalog');
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_catalog', $where);
-		$record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-		if(!$record['uid']) {
-			header('HTTP/1.1 301 Moved Permanently');
-			header('Location: ' . t3lib_div::locationHeaderUrl($this->cObj->getTypoLink_URL($this->listPid)));
-			header('Connection: close');
-		}
-		$content = $this->renderRecord($record, $this->conf['fields.'], $this->recordtemplate);
+		$record = $this->fetchLocalized(FALSE, '*', 'tx_multicatalog_catalog', 'uid = ' . intval($this->piVars['uid']) . $this->cObj->enableFields('tx_multicatalog_catalog')); 
+		$content = $this->renderRecord($record, $this->getFieldsConf('catalog'), $this->recordtemplate);
 		return $content;
 
 	}
-
+	
 	/**
 	 * List View
 	 * Uses $this->renderRecord() to get the Contents of the records
@@ -149,23 +215,134 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			'###RECORD_LIST###'
 		);
 
-		$markerArray = array();
+		$markerArray = $this->recordAndFieldsConfToMarkerArray(array(), $this->getFieldsConf());
 
 		$where =
-			'sys_language_uid = ' . intval($GLOBALS['TSFE']->sys_language_content) . ' AND ' .
 			'pid IN (' . $this->pids . ') ' .
 			$this->cObj->enableFields('tx_multicatalog_catalog');
-
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_catalog', $where, '', 'sorting ASC');
-		while($record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			$markerArray['###RECORDS###'] .= $this->renderRecord($record, $this->conf['fields.'], $this->recordtemplate);
+			
+		if($this->piVars['cat']) {
+			$where .= 'AND category = ' . intval($this->piVars['cat']);
 		}
+		
+		$perPage = 10;
+		$page = max(0,$this->piVars['page']-1);
+		
+		$records = $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_catalog', $where, '', 'sorting ASC');
+		
+		$i=0;
+		foreach($records as $record) {
+			if($i>=($perPage*$page) && $i < ($perPage*($page+1))){
+				$markerArray['###RECORDS###'] .= $this->renderRecord($record, $this->getFieldsConf('catalog'), $this->recordtemplate);
+			}
+			$i++;
+		}
+		
+		$markerArray['###PAGEBROWSER###'] = $this->pagebrowser(ceil($i/$perPage));
 
 		return $this->cObj->substituteMarkerArray(
 			$this->cObj->getSubpart($this->template,'###LISTVIEW###'),
 			$markerArray
 		);
 
+	}
+	
+	function pagebrowser($pages) {
+		
+		if($pages<2){return;}
+		$piVars = t3lib_div::_GP($this->prefixId);
+	         // Active Page
+		$actPage = ($piVars['page'])?$piVars['page']:1;
+		// Page List
+		$pageList = array();
+		
+		$pageSchemes = array(
+		    // First Pages
+		    array(
+			'min' => 1,
+			'max' => min($pages, $this->pageSchemeFirst)
+		    ),
+		    // Last 3
+		    array(
+			'min' => max(1,($pages-($this->pageSchemeLast))),
+			'max' => $pages
+		    ),
+		    // ActPage +- 2
+		    array(
+			'min' => max(1,($actPage-($this->pageSchemeAroundAct))),
+			'max' => min($pages,($actPage+($this->pageSchemeAroundAct)))
+		    ),
+		    // Each 10
+		    array(
+			'min' => $this->pageSchemeEach,
+			'max' => $pages,
+			'iterate' => $this->pageSchemeEach
+		    )
+		);
+		
+		foreach($pageSchemes as $pageScheme){
+		    $iterate = ($pageScheme['iterate'])?$pageScheme['iterate']:1;
+		    for($i=$pageScheme['min'];$i<=$pageScheme['max'];$i=$i+$iterate){
+			$pageList[] = $i;
+		    }
+		}
+	
+		$pageList = array_unique($pageList);
+		sort($pageList);
+		
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+	
+		$typolinkConf = array(
+		    'parameter' => $GLOBALS['TSFE']->id,
+		    'addQueryString' => 1,
+		    'addQueryString.' => array(
+			'method' => 'GET,POST',
+			'exclude' => $this->prefixId.'|page',
+		    )
+		);
+		
+		$content = '<ul class="pagebrowser clearfix">';
+		foreach($pageList as $page){
+		    $content .= '<li>';
+	
+		    if($page != $actPage){
+			$typolinkConf['additionalParams'] = $params.'&'.$this->prefixId.'[page]='.$page;
+			$uri = $cObj->typolink_URL($typolinkConf);
+			$content .= '<a href="'.$uri.'">'.$page.'</a>';
+		    }else{
+				$content .= '<span class="act">Seite '.$page.' von '.$pages.'</span>';
+		    }
+	
+		    $content .= '</li>';
+		}
+		$content .= '</ul>';
+		return $content;
+		
+		
+	}
+	
+	/**
+	 * Cat Menu View
+	 * Lists available Categories
+	 *
+	 * @return	string		The Rendered View, ready for output
+	 */
+	function catMenuView(){
+		
+		$markerArray = $this->recordAndFieldsConfToMarkerArray(array(), $this->getFieldsConf());
+		
+		$where = 'category = 0 AND ' . 'pid IN (' . $this->pids . ') ' . $this->cObj->enableFields('tx_multicatalog_category');
+		$categories = $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_category', $where, '', 'sorting ASC');
+		
+		foreach($categories as $category) {
+			$markerArray['###CATEGORIES###'] .= $this->renderRecord($category, $this->getFieldsConf('category'), $this->categorytemplate);
+		}
+		
+		return $this->cObj->substituteMarkerArray(
+			$this->cObj->getSubpart($this->template,'###CATMENUVIEW###'),
+			$markerArray
+		);
+		
 	}
 
 	/**
@@ -191,7 +368,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 *     stripHtml = 1
 	 *   }
 	 * }
-	 * If you work with articles, their fields are available below plugin.tx_multicatalog_pi1..articlefields
+	 * If you work with articles, their fields are available below plugin.tx_multicatalog_pi1.articlefields
 	 *
 	 * Other TS properties:
 	 * ====================
@@ -218,11 +395,117 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 * @param	string		Template for this record
 	 * @return	string		The rendered record is given back to singleView() or listView()
 	 */
-	function renderRecord($record, $fieldsConf, $template){
-		$markerArray = array();
+	function renderRecord($record, $fieldsConf, $template) {
+		
+		$markerArray = $this->recordAndFieldsConfToMarkerArray($record, $fieldsConf);
+		
+		// Articles
+		if ($record['articles']) {
+			
+			$markerArray['###ARTICLES###'] = '';
+			$articles = array();
+			$i = 0;    
+			$where = 'irre_parentid = ' . $record['uid'] . $this->cObj->enableFields('tx_multicatalog_article');
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_article', $where, '', 'sorting ASC');
+			while($article = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				
+				// Fill cObj with article fields, product fields (prefixed with "parent_") and the iteration number
+				$this->cObj->data = $article;
+				foreach($record as $field => $value) {
+					$this->cObj->data['parent_' . $field] = $value;
+				}
+				$this->cObj->data['i'] = $i;
+				
+				$markerArray['###ARTICLES###'] .= $this->renderRecord($article, $this->getFieldsConf('article'), $this->articletemplate);
+				
+			}
 
+		}
+		
+		// Category
+		if ($record['category']) {
+			
+			$category = $this->fetchLocalized(0, '*', 'tx_multicatalog_category', 'uid = ' . $record['category']);
+			
+			foreach($this->recordAndFieldsConfToMarkerArray($category, $this->getFieldsConf('category')) as $marker => $value) {
+				$markerArray[str_replace('xXx###', '###CATEGORY_', 'xXx' . $marker)] = $value;
+			}
+		}
+		return $this->cObj->substituteMarkerArray($template, $markerArray);
+	}
+
+	/**
+	 * Custom implementation of tslib_pibase::pi_wrapInBaseClass
+	 * Adds the current view as class
+	 *
+	 * @param	string		Content to Wrap
+	 * @return	string		Content wrapped by div with Plugin Classes
+	 */
+	function pi_wrapInBaseClass($str){
+		return '<div class="' . str_replace('_','-',$this->prefixId) . ' ' . str_replace('_','-',$this->prefixId) . '-' . $this->view . '">' . $str . '</div>';
+	}
+	
+	/**
+	 * Gets fields configuration for a specific model and view
+	 * 
+	 * plugin.tx_multicatalog_pi1{
+	 *   fields{
+	 *     foo = bar1
+	 *   }
+	 *   articlefields{
+	 *     foo = bar2
+	 *   }
+	 *   single{
+	 *   	fields{
+	 *   		foo = bar3
+	 *   	}
+	 *   	catalogfields{
+	 *   		foo = bar4
+	 *   	}
+	 *   }
+	 * }
+	 * getFieldsConf('list', 'catalog'): [foo] => bar1
+	 * getFieldsConf('list', 'article'): [foo] => bar2
+	 * getFieldsConf('single', 'article'): [foo] => bar3
+	 * getFieldsConf('single', 'catalog'): [foo] => bar4
+	 * 
+	 * @param string The current model (catalog, article or category)
+	 * @param string The current view (list, single or catmenu) (defaults to $this->view)
+	 * @return array Fields Configuration
+	 */
+	function getFieldsConf($model='', $view = '') {
+		if(!$view) {
+			$view = $this->view;
+		}
+		$conf = is_array($this->conf['fields.'])?$this->conf['fields.']:array();
+		$conf = t3lib_div::array_merge_recursive_overrule($conf, is_array($this->conf[$model . 'fields.'])?$this->conf[$model . 'fields.']:array());
+		$conf = t3lib_div::array_merge_recursive_overrule($conf, is_array($this->conf[$view . '.']['fields.'])?$this->conf[$view . '.']['fields.']:array());
+		$conf = t3lib_div::array_merge_recursive_overrule($conf, is_array($this->conf[$view . '.'][$model . 'fields.'])?$this->conf[$view . '.'][$model . 'fields.']:array());
+		
+		return $conf;
+	}
+	
+	/**
+	 * Extends Record fields with TS Fields Configuration and fills a marker array with the fields
+	 * 
+	 * @param array DB Record to render
+	 * @param array Fields Configuration
+	 * @return array Marker Array
+	 */
+	function recordAndFieldsConfToMarkerArray($record, $fieldsConf) {
+		
+		$markerArray = array();
+		
+		if(!is_array($fieldsConf)) {
+			$fieldsConf = array();
+		}
+		
 		foreach($record as $field => $value) {
 			$fieldsConf[$field] = $value;
+		}
+		
+		foreach($this->markerLLs as $key => $value) {
+			$fieldsConf['ll_' . $key] = $value;
 		}
 		
 		$this->cObj->data = $fieldsConf;
@@ -237,19 +520,41 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				
 				// ###PRICE###
 				if ($field == 'price') {
-					$value = number_format($value, 2, ',', '.');
+					$value = number_format(str_replace(',', '.', $value), 2, ',', '.');
+				}
+				
+				// ###SUBCATEGORIES###
+				if ($field == 'subcategories') {
+					$value = '';
+					$where = 'category = ' . $fieldsConf['uid'] . ' AND ' . 'pid IN (' . $this->pids . ') ' . $this->cObj->enableFields('tx_multicatalog_category');
+					$subcategories = $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_category', $where, '', 'sorting ASC');
+					foreach($subcategories as $subcategory) {
+						$tmpFConf = array(
+							'name.' => array(
+								'link' => 1
+							) 
+						);
+						$subcategoryMarkers = $this->recordAndFieldsConfToMarkerArray($subcategory, $tmpFConf);
+						$value .= '<li>' . $subcategoryMarkers['###NAME###'] . '</li>';
+					}
+					$value = '<ul class="categories">' . $value . '</ul>';
 				}
 				
 				// link if value.link = 1
 				if($fieldsConf[$field . '.']['link'] == 1) {
-					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->singlePid;
-					$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[uid]=' . $record['uid'];
+					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->linkTargetPid;
+					$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[' . $this->linkVarName . ']=' . $record['uid'];
 					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = true;
 				}
 	
 				// backlink if value.backlink = 1
 				if($fieldsConf[$field . '.']['backlink'] == 1) {
 					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->listPid;
+					
+					if($record['category']) {
+						$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[cat]=' . $record['category'];
+					}
+					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = true;
 				}
 				
 				$markerArray['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap(
@@ -258,43 +563,9 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				);
 			}
 		}
-
-		// Articles
-		if ($record['articles']) {
-			
-			$markerArray['###ARTICLES###'] = '';
-			$articles = array();
-			$i = 0;
-			$where = 'irre_parentid = ' . $record['uid'] . $this->cObj->enableFields('tx_multicatalog_article');
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_multicatalog_article', $where, '', 'sorting ASC');
-			while($article = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				
-				// Fill cObj with article fields, product fields (prefixed with "parent_") and the iteration number
-				$this->cObj->data = $article;
-				foreach($record as $field => $value) {
-					$this->cObj->data['parent_' . $field] = $value;
-				}
-				$this->cObj->data['i'] = $i;
-				
-				$markerArray['###ARTICLES###'] .= $this->renderRecord($article, $this->conf['articlefields.'], $this->articletemplate);
-				
-			}
-		}
-
-		return $this->cObj->substituteMarkerArray($template, $markerArray);
+		
+		return $markerArray;
 	}
-
-	/**
-	 * Custom implementation of tslib_pibase::pi_wrapInBaseClass
-	 * Adds the current view as class
-	 *
-	 * @param	string		Content to Wrap
-	 * @return	string		Content wrapped by div with Plugin Classes
-	 */
-	function pi_wrapInBaseClass($str){
-		return '<div class="' . str_replace('_','-',$this->prefixId) . ' ' . str_replace('_','-',$this->prefixId) . '-' . $this->view . '">' . $str . '</div>';
-	}
-
 }
 
 

@@ -9,6 +9,7 @@
 			<label index="ff_view">View</label>
 			<label index="ff_view.single">Single</label>
 			<label index="ff_view.list">List</label>
+			<label index="ff_view.catmenu">Category Menu</label>
 			<label index="ff_singlePid">Single Page</label>
 			<label index="ff_listPid">List Page</label>
 			<label index="backlink">Back to List</label>
@@ -18,6 +19,7 @@
 			<label index="ff_view">Ansicht</label>
 			<label index="ff_view.single">Single</label>
 			<label index="ff_view.list">List</label>
+			<label index="ff_view.catmenu">Kategoriemenü</label>
 			<label index="ff_singlePid">Single Page</label>
 			<label index="ff_listPid">List Page</label>
 			<label index="backlink">Zur Listenansicht</label>

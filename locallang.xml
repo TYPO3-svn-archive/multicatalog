@@ -15,7 +15,8 @@
 			<label index="constants.templateFile">Template File</label>
 			<label index="ext_conf.use_articles">Use Articles: For different sizes, colors, packaging units etc.</label>
 			<label index="ext_conf.teaser_rte">RTE for Teaser: If enabled product teasers can be edited using an RTE</label>
-			<label index="ext_conf.page_categories">Use Pages as categories: Otherwise category database records</label>
+			<label index="ext_conf.category_records">Use Database Records for Categories: Otherwise pages are used to categorize</label>
+			<label index="ext_conf.hierachical_categories">Hierachical Categories: If you need subcategories</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="pi1_title">Produktkatalog</label>
@@ -27,7 +28,8 @@
 			<label index="constants.templateFile">Template-Datei</label>
 			<label index="ext_conf.use_articles">Artikel verwenden: Für verschiedene Größen, Farben, Verpackungseinheiten etc.</label>
 			<label index="ext_conf.teaser_rte">RTE für Kurzbeschreibung: Kurzbeschreibungen können mit einem RTE bearbeitet werden.</label>
-			<label index="ext_conf.page_categories">Nutze Seiten als Kategorien: Alternativ Kategoriedatensätze</label>
+			<label index="ext_conf.category_records">Nutze Kategoriedatensätze: Alternativ werden Seiten als Kategorien verwendet</label>
+			<label index="ext_conf.hierachical_categories">Hierarchsche Kategorien: Für Unterkategorien</label>
 		</languageKey>
 	</data>
 </T3locallang>

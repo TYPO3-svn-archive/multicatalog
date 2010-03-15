@@ -5,87 +5,102 @@ plugin.tx_multicatalog_pi1 {
 	listPid = {$plugin.tx_multicatalog_pi1.listPid}
 	singlePid = {$plugin.tx_multicatalog_pi1.singlePid}
 	
-	fields{
-	
-	  ###BACKLINK###
-	  backlink{
-	    backlink = 1
-	    data = LLL:EXT:multicatalog/pi1/locallang.xml:backlink
-	    wrap = <span class="backlink">|</span>
-	  }
-	  
-	  ###FIRST_PICTURE###
-	  first_picture{
-	    cObject = IMAGE
-	    cObject{
-	      file{
-	        import{
-	          field = pictures
-	          listNum = 0
-	          wrap = uploads/tx_multicatalog/|
-	        }
-	        width = 120
-	      }
-		}
-		link = 1
-	  }
-	  
-	  ###MORELINK###
-	  morelink{
-	    data = LLL:EXT:multicatalog/pi1/locallang.xml:morelink
-	    link = 1
-	    wrap = <span class="morelink">|<span>
-	  }
-	  
-	  ###PICTURES###
-	  pictures.cObject < tt_content.image.20
-	  pictures.cObject{
-	    imgList.field = pictures
-	    imgPath = uploads/tx_multicatalog/
-	    imgObjNum = 1
-	    1{
-	      file.import.current = 1
-	      file.width = 200
-	      altText >
-	      altText.field = title
-	      altText := replaceString('"','&quot;')
-	      titleText < .altText
-	    }
-	    maxW = 200
-	    textPos = 0
-	  }
-	}
 	
 	list{
+		catalogfields{
+	  		
+	  		###FIRST_PICTURE###
+		  	first_picture{
+				cObject = IMAGE
+				cObject{
+					file{
+						import{
+							field = pictures
+							listNum = 0
+							wrap = uploads/tx_multicatalog/|
+						}
+						width = 120
+						maxH = 120
+					}
+				}
+				link = 1
+		  	}
+		  	
+		  	###MORELINK###
+			morelink{
+				data = LLL:EXT:multicatalog/pi1/locallang.xml:morelink
+				link = 1
+				wrap = <span class="morelink">|<span>
+			}
+			
+			title.link = 1
+		  
+		}
 	}
 	
 	single{
+		catalogfields{
+			
+			###BACKLINK###
+			backlink{
+				backlink = 1
+				data = LLL:EXT:multicatalog/pi1/locallang.xml:backlink
+				wrap = <span class="backlink">|</span>
+			}
+			
+			###PICTURES###
+			pictures.cObject < tt_content.image.20
+			pictures.cObject{
+				imgList.field = pictures
+				imgPath = uploads/tx_multicatalog/
+				imgObjNum = 1
+				1{
+					file.import.current = 1
+					file.width = 200
+					altText >
+					altText.field = title
+					altText := replaceString('"','&quot;')
+					titleText < .altText
+	   			}
+				maxW = 200
+				textPos = 0
+			}
+		}
 	}
+	
+	catmenu{
+		fields{
+			name.link = 0
+			subcategories = enable
+		}
+	}
+	
 	
 }
 
 # Lightbox
 [globalVar = LIT:1 = {$plugin.tx_multicatalog_pi1.enableLightbox}]
-plugin.tx_multicatalog_pi1.fields.tx_perfectlightbox_activate = 1
-plugin.tx_multicatalog_pi1.fields.tx_perfectlightbox_imageset = 1
-plugin.tx_multicatalog_pi1.fields.pictures.cObject.1.imageLinkWrap >
-plugin.tx_multicatalog_pi1.fields.pictures.cObject.1.imageLinkWrap = 1
-plugin.tx_multicatalog_pi1.fields.pictures.cObject.1.imageLinkWrap{
-  enable = 1
-  typolink{
-    parameter.cObject = IMG_RESOURCE
-    parameter.cObject{
-      file{
-        import{
-          field = pictures
-          listNum.stdWrap.data = register: IMAGE_NUM_CURRENT
-          wrap = uploads/tx_multicatalog/|
-        }
-        width = {$plugin.perfectlightbox.lightBoxMaxW}
+plugin.tx_multicatalog_pi1.single.catalogfields{
+  tx_perfectlightbox_activate = 1
+  tx_perfectlightbox_imageset = 1
+  pictures.cObject.1.imageLinkWrap >
+  pictures.cObject.1.imageLinkWrap = 1
+  pictures.cObject.1.imageLinkWrap{
+    enable = 1
+    typolink{
+      parameter.cObject = IMG_RESOURCE
+      parameter.cObject{
+        file{
+          import{
+            field = pictures
+            listNum.stdWrap.data = register: IMAGE_NUM_CURRENT
+            wrap = uploads/tx_multicatalog/|
+          }
+          maxW = {$plugin.perfectlightbox.lightBoxMaxW}
+        } 
       }
-      
+      userFunc = tx_perfectlightbox->main
     }
-    userFunc = tx_perfectlightbox->main
   }
 }
 [global]
