@@ -56,6 +56,8 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 
 	private $markerLLs;
 	
+	private $local_cObj;
+	
 	private $uploadFolder = 'uploads/tx_multicatalog/';
 
 	/**
@@ -94,6 +96,8 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		$this->pi_USER_INT_obj=1;
 		$this->pi_initPIflexForm();
 
+		$this->local_cObj = t3lib_div::makeInstance('tslib_cObj');
+		
 		$this->pluginConfiguration();
 
 		$content = $this->dispatchView();
@@ -447,11 +451,11 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			while($article = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				
 				// Fill cObj with article fields, product fields (prefixed with "parent_") and the iteration number
-				$this->cObj->data = $article;
+				$this->fillCObjData($article);
 				foreach($record as $field => $value) {
-					$this->cObj->data['parent_' . $field] = $value;
+					$this->fillCObjData(array('parent_' . $field => $value));
 				}
-				$this->cObj->data['i'] = $i;
+				$this->fillCObjData(array('i'=>$i));
 				
 				$markerArray['###ARTICLES###'] .= $this->renderRecord($article, $this->getFieldsConf('article'), $this->articletemplate);
 				
@@ -483,8 +487,12 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		return '<div class="' . str_replace('_','-',$this->prefixId) . ' ' . str_replace('_','-',$this->prefixId) . '-' . $this->view . '">' . $str . '</div>';
 	}
 	
+	function fillCObjData($array) {
+		$this->local_cObj->data = t3lib_div::array_merge_recursive_overrule($this->local_cObj->data, $array);
+	}
+	
 	/**
-	 * Gets fields configuration for a specific model and view
+	 * Gets TS fields configuration for a specific model and view
 	 * 
 	 * plugin.tx_multicatalog_pi1{
 	 *   fields{
@@ -547,9 +555,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$fieldsConf['ll_' . $key] = $value;
 		}
 		
-		// All fields (real or introduced by TS) are available by gettext field:
-		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
-		$local_cObj->start($fieldsConf);
+		$this->fillCObjData($fieldsConf);
 		
 		// render TS fields setup
 		foreach($fieldsConf as $field => $value) {
@@ -601,7 +607,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = true;
 				}
 				
-				$markerArray['###' . strtoupper($field) . '###'] = $local_cObj->stdWrap(
+				$markerArray['###' . strtoupper($field) . '###'] = $this->local_cObj->stdWrap(
 					$value,
 					$fieldsConf[$field . '.']
 				);
