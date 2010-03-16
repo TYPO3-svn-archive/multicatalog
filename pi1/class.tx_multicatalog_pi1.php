@@ -263,7 +263,13 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$this->cObj->enableFields('tx_multicatalog_catalog');
 			
 		if($this->piVars['cat']) {
-			$where .= 'AND category = ' . intval($this->piVars['cat']);
+			$cat = intval($this->piVars['cat']);
+			$where .= 'AND (
+				category = ' . $cat . ' OR
+				category LIKE "' . $cat . ',%" OR
+				category LIKE "%,' . $cat . ',%" OR
+				category LIKE "%,' . $cat . '"
+			)';
 		}
 		
 		$perPage = 10;
@@ -271,15 +277,19 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		
 		$records = $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_catalog', $where, '', 'sorting ASC');
 		
-		$i=0;
-		foreach($records as $record) {
-			if($i>=($perPage*$page) && $i < ($perPage*($page+1))){
-				$markerArray['###RECORDS###'] .= $this->renderRecord($record, $this->getFieldsConf('catalog'), $this->recordtemplate);
+		if(count($records)) {
+			$i=0;
+			foreach($records as $record) {
+				if($i>=($perPage*$page) && $i < ($perPage*($page+1))){
+					$markerArray['###RECORDS###'] .= $this->renderRecord($record, $this->getFieldsConf('catalog'), $this->recordtemplate);
+				}
+				$i++;
 			}
-			$i++;
+			$markerArray['###PAGEBROWSER###'] = $this->pagebrowser(ceil($i/$perPage));
+		}else{
+			$markerArray['###RECORDS###'] = $this->pi_getLL('noRecordsFound');
+			$markerArray['###PAGEBROWSER###'] = '';
 		}
-		
-		$markerArray['###PAGEBROWSER###'] = $this->pagebrowser(ceil($i/$perPage));
 		
 		return $this->cObj->substituteMarkerArray(
 			$this->cObj->getSubpart($this->template,'###LISTVIEW###'),
@@ -467,7 +477,8 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		// Category
 		if ($record['category']) {
 			
-			$category = $this->fetchLocalized(0, '*', 'tx_multicatalog_category', 'uid = ' . $record['category']);
+			$catArray = explode(',', $record['category']);
+			$category = $this->fetchLocalized(0, '*', 'tx_multicatalog_category', 'uid = ' . $catArray[0]);
 			
 			foreach($this->recordAndFieldsConfToMarkerArray($category, $this->getFieldsConf('category')) as $marker => $value) {
 				$markerArray[str_replace('xXx###', '###CATEGORY_', 'xXx' . $marker)] = $value;
