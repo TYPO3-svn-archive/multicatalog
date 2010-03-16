@@ -25,6 +25,7 @@
 			<label index="tx_multicatalog_category.name">Name</label>
 			<label index="tx_multicatalog_category.category">Parent Category</label>
 			<label index="tt_content.list_type_pi1">Product Catalog</label>
+			<label index="tt_content.list_type_extbase_pi">Extbase Product Catalog</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tx_multicatalog_article">Artikel</label>
@@ -46,6 +47,7 @@
 			<label index="tx_multicatalog_category.name">Name</label>
 			<label index="tx_multicatalog_category.category">Übergeordnete Kategorie</label>
 			<label index="tt_content.list_type_pi1">Produktkatalog</label>
+			<label index="tt_content.list_type_extbase_pi">Extbase Produktkatalog</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="tx_multicatalog_article">Article</label>

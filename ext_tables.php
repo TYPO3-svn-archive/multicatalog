@@ -1,15 +1,6 @@
 <?php
 if (!defined ('TYPO3_MODE')) die ('Access denied.');
 
-/**
- * Registers a Plugin to be listed in the Backend.
- */
-Tx_Extbase_Utility_Extension::registerPlugin(
-	$_EXTKEY,// The extension name (in UpperCamelCase) or the extension key (in lower_underscore)
-	'Pi2',				// A unique name of the plugin in UpperCamelCase
-	'Extbase Product Catalog (Experimental)'	// A title shown in the backend dropdown field
-);
-
 t3lib_extMgm::allowTableOnStandardPages('tx_multicatalog_catalog');
 
 $TCA['tx_multicatalog_catalog'] = array (
@@ -36,8 +27,8 @@ $TCA['tx_multicatalog_catalog'] = array (
 	),
 );
 
-$_EXTCONF = unserialize($_EXTCONF);
-if($_EXTCONF['use_articles'] || TYPO3_MODE != 'BE'){
+$extConf = unserialize($_EXTCONF);
+if($extConf['use_articles'] || TYPO3_MODE != 'BE'){
 	
 	$TCA['tx_multicatalog_article'] = array (
 		'ctrl' => array (
@@ -59,7 +50,7 @@ if($_EXTCONF['use_articles'] || TYPO3_MODE != 'BE'){
 	t3lib_extMgm::allowTableOnStandardPages('tx_multicatalog_article');
 }
 
-if($_EXTCONF['category_records'] || TYPO3_MODE != 'BE'){
+if($extConf['category_records'] || TYPO3_MODE != 'BE'){
 	$TCA['tx_multicatalog_category'] = array (
 		'ctrl' => array (
 			'title'     => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_category',		
@@ -90,14 +81,28 @@ if($_EXTCONF['category_records'] || TYPO3_MODE != 'BE'){
 	t3lib_extMgm::addPiFlexFormValue($_EXTKEY . '_pi1', 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform.xml');
 }
 
-t3lib_div::loadTCA('tt_content');
-$TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1']='layout,select_key';
 
-t3lib_extMgm::addPlugin(array(
-	'LLL:EXT:multicatalog/locallang_db.xml:tt_content.list_type_pi1',
-	$_EXTKEY . '_pi1',
-	t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif'
-),'list_type');
+/**
+ * Register Plugin either old style or extbase
+ */
+if($extConf['run_on_extbase']) {
+	Tx_Extbase_Utility_Extension::registerPlugin(
+		$_EXTKEY,// The extension name (in UpperCamelCase) or the extension key (in lower_underscore)
+		'Pi1',				// A unique name of the plugin in UpperCamelCase
+		'LLL:EXT:multicatalog/locallang_db.xml:tt_content.list_type_extbase_pi'	// A title shown in the backend dropdown field
+	);
+}else{
+	t3lib_div::loadTCA('tt_content');
+	$TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1']='layout,select_key';
+	t3lib_extMgm::addPlugin(
+		array(
+			'LLL:EXT:multicatalog/locallang_db.xml:tt_content.list_type_pi1',
+			$_EXTKEY . '_pi1',
+			t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif'
+		),
+		'list_type'
+	);	
+}
 
 
 t3lib_extMgm::addStaticFile($_EXTKEY,'pi1/static/','Product Catalog');

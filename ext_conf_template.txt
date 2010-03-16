@@ -9,3 +9,6 @@ category_records = 0
 
 # cat=basic; type=boolean; label=LLL:EXT:multicatalog/locallang.xml:ext_conf.hierachical_categories
 hierachical_categories = 0
+
+# cat=basic; type=boolean; label=LLL:EXT:multicatalog/locallang.xml:ext_conf.run_on_extbase
+run_on_extbase = 0

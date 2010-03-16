@@ -6,23 +6,27 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="ff_view">View</label>
-			<label index="ff_view.single">Single</label>
-			<label index="ff_view.list">List</label>
-			<label index="ff_view.catmenu">Category Menu</label>
-			<label index="ff_singlePid">Single Page</label>
-			<label index="ff_listPid">List Page</label>
 			<label index="backlink">Back to List</label>
+			<label index="ff_listPid">List Page</label>
+			<label index="ff_restrictToCategories">Restrict to following categories</label>
+			<label index="ff_singlePid">Single Page</label>
+			<label index="ff_templateFile">Template File</label>
+			<label index="ff_view">View</label>
+			<label index="ff_view.catmenu">Category Menu</label>
+			<label index="ff_view.list">List</label>
+			<label index="ff_view.single">Single</label>
 			<label index="morelink">more</label>
 		</languageKey>
-		<languageKey index="default" type="array">
-			<label index="ff_view">Ansicht</label>
-			<label index="ff_view.single">Single</label>
-			<label index="ff_view.list">List</label>
-			<label index="ff_view.catmenu">Kategoriemenü</label>
-			<label index="ff_singlePid">Single Page</label>
-			<label index="ff_listPid">List Page</label>
+		<languageKey index="de" type="array">
 			<label index="backlink">Zur Listenansicht</label>
+			<label index="ff_listPid">List Page</label>
+			<label index="ff_restrictToCategories">Auf folgende Kategorien beschränken</label>
+			<label index="ff_singlePid">Single Page</label>
+			<label index="ff_templateFile">Template Datei</label>
+			<label index="ff_view">Ansicht</label>
+			<label index="ff_view.catmenu">Kategoriemenü</label>
+			<label index="ff_view.list">Liste</label>
+			<label index="ff_view.single">Einzelansicht</label>
 			<label index="morelink">mehr</label>
 		</languageKey>
 	</data>

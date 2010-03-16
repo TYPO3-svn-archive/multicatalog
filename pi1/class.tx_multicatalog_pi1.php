@@ -53,7 +53,6 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	var $scriptRelPath = 'pi1/class.tx_multicatalog_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey        = 'multicatalog';	// The extension key.
 	var $pi_checkCHash = true;
-	var $linkVarName   = 'uid';
 
 	private $markerLLs;
 	
@@ -93,14 +92,33 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		$this->pi_USER_INT_obj=1;
-
 		$this->pi_initPIflexForm();
 
-		$this->view = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'view', 'sDEF');
+		$this->pluginConfiguration();
+
+		$content = $this->dispatchView();
+		return $this->pi_wrapInBaseClass($content);
+	}
+	
+	function pluginConfiguration() {
 		
+		/**
+		 * The current view
+		 */
+		$this->view = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'view', 'sDEF');
+		if(!t3lib_div::inList('single,list,catmenu', $this->view)) {
+			$this->view = 'list';
+		}
+		
+		/**
+		 * List Page Id
+		 */
 		$ff_listPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'listPid', 'sDEF');
 		$this->listPid = $ff_listPid ? $ff_listPid : $this->conf['listPid'];
 		
+		/**
+		 * Single Page Id
+		 */
 		$ff_singlePid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'singlePid', 'sDEF');
 		$this->singlePid = $ff_singlePid ? $ff_singlePid : $this->conf['singlePid'];
 		
@@ -116,26 +134,45 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			( $this->conf['storagePid'] ?
 				$this->conf['storagePid'] :
 				$GLOBALS['TSFE']->id );
-			
-
-		$this->template = $this->cObj->fileResource($this->conf['template']);
+				
+		/**
+		 * Pid the TS .link property links to.
+		 * For single and list view it's the singlePid
+		 * For catmenu view it's the listPid
+		 */
+		$this->linkTargetPid = ($this->view=='catmenu') ? $this->listPid : $this->singlePid;
+		
+		/**
+		 * GET Parameter for the record linked to with the TS .link property
+		 * For single and list view it's $this->prefixId[uid]
+		 * For catmenu view it's $this->prefixId[cat]
+		 */
+		$this->linkVarName = ($this->view=='catmenu') ? 'cat' : 'uid';
+				
+		/**
+		 * Template File
+		 * Flexform overrides TS setting
+		 */
+		$ff_templateFile = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'templateFile', 'sDEF');
+		$templateFile = $ff_templateFile ? $ff_templateFile : $this->conf['template'];
+		$this->template = $this->cObj->fileResource($templateFile);
 		$this->articletemplate = $this->cObj->getSubpart($this->template, '###ARTICLE###');
 		$this->categorytemplate = $this->cObj->getSubpart($this->template, '###CATEGORY_LIST###');
-
-		if($this->view == 'single') {
-			$this->linkTargetPid = $this->singlePid;
-			$content = $this->singleView();
-		} elseif($this->view == 'catmenu') {
-			$this->linkVarName = 'cat';
-			$this->linkTargetPid = $this->listPid;
-			$content = $this->catMenuView();
-		} else {
-			$this->view = 'list';
-			$this->linkTargetPid = $this->singlePid;
-			$content = $this->listView();
+	}
+	
+	function dispatchView() {
+		switch($this->view) {
+			case 'list':
+				$content = $this->listView();
+				break;
+			case 'single':
+				$content = $this->singleView();
+				break;
+			case 'catmenu':
+				$content = $this->catMenuView();
+				break;
 		}
-
-		return $this->pi_wrapInBaseClass($content);
+		return $content;
 	}
 
 	/**
@@ -216,7 +253,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		);
 
 		$markerArray = $this->recordAndFieldsConfToMarkerArray(array(), $this->getFieldsConf());
-
+		
 		$where =
 			'pid IN (' . $this->pids . ') ' .
 			$this->cObj->enableFields('tx_multicatalog_catalog');
@@ -239,7 +276,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		}
 		
 		$markerArray['###PAGEBROWSER###'] = $this->pagebrowser(ceil($i/$perPage));
-
+		
 		return $this->cObj->substituteMarkerArray(
 			$this->cObj->getSubpart($this->template,'###LISTVIEW###'),
 			$markerArray
@@ -422,6 +459,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 
 		}
 		
+		
 		// Category
 		if ($record['category']) {
 			
@@ -547,6 +585,9 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				if($fieldsConf[$field . '.']['link'] == 1) {
 					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->linkTargetPid;
 					$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[' . $this->linkVarName . ']=' . $record['uid'];
+					if($fieldsConf[$field . '.']['link.']['includeCategoryParameter'] == 1 && $this->linkVarName == 'uid') {
+						$fieldsConf[$field . '.']['typolink.']['additionalParams'] .= '&' . $this->prefixId . '[cat]=' . $record['category'];
+					}
 					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = true;
 				}
 	
