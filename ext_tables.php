@@ -1,7 +1,14 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+if (!defined ('TYPO3_MODE')) die ('Access denied.');
+
+/**
+ * Registers a Plugin to be listed in the Backend.
+ */
+Tx_Extbase_Utility_Extension::registerPlugin(
+	$_EXTKEY,// The extension name (in UpperCamelCase) or the extension key (in lower_underscore)
+	'Pi2',				// A unique name of the plugin in UpperCamelCase
+	'Extbase Product Catalog (Experimental)'	// A title shown in the backend dropdown field
+);
 
 t3lib_extMgm::allowTableOnStandardPages('tx_multicatalog_catalog');
 

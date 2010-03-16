@@ -104,3 +104,5 @@ plugin.tx_multicatalog_pi1.single.catalogfields{
   }
 }
 [global]
+
+plugin.tx_multicatalog.settings < plugin.tx_multicatalog_pi1
