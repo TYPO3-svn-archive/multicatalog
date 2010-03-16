@@ -500,6 +500,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$fieldsConf = array();
 		}
 		
+		// All actual record fields are attached to the TS setup
 		foreach($record as $field => $value) {
 			$fieldsConf[$field] = $value;
 		}
@@ -508,7 +509,9 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$fieldsConf['ll_' . $key] = $value;
 		}
 		
-		$this->cObj->data = $fieldsConf;
+		// All fields (real or introduced by TS) are available by gettext field:
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
+		$local_cObj->start($fieldsConf);
 		
 		// render TS fields setup
 		foreach($fieldsConf as $field => $value) {
@@ -557,7 +560,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = true;
 				}
 				
-				$markerArray['###' . strtoupper($field) . '###'] = $this->cObj->stdWrap(
+				$markerArray['###' . strtoupper($field) . '###'] = $local_cObj->stdWrap(
 					$value,
 					$fieldsConf[$field . '.']
 				);
