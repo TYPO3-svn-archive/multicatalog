@@ -50,7 +50,7 @@ if($extConf['use_articles'] || TYPO3_MODE != 'BE'){
 	t3lib_extMgm::allowTableOnStandardPages('tx_multicatalog_article');
 }
 
-if($extConf['category_records'] || TYPO3_MODE != 'BE'){
+if($extConf['category_records'] || TYPO3_MODE != 'BE') {
 	$TCA['tx_multicatalog_category'] = array (
 		'ctrl' => array (
 			'title'     => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_category',		
@@ -75,7 +75,7 @@ if($extConf['category_records'] || TYPO3_MODE != 'BE'){
 	// Flexform with category records
 	$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1'] = 'pi_flexform';
 	t3lib_extMgm::addPiFlexFormValue($_EXTKEY . '_pi1', 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform_category_records.xml');
-} else{
+} else {
 	// Flexform without category records
 	$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1'] ='pi_flexform';
 	t3lib_extMgm::addPiFlexFormValue($_EXTKEY . '_pi1', 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform.xml');
@@ -91,7 +91,7 @@ if($extConf['run_on_extbase']) {
 		'Pi1',				// A unique name of the plugin in UpperCamelCase
 		'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tt_content.list_type_extbase_pi'	// A title shown in the backend dropdown field
 	);
-}else{
+} else {
 	t3lib_div::loadTCA('tt_content');
 	$TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1']='layout,select_key';
 	t3lib_extMgm::addPlugin(
@@ -105,9 +105,9 @@ if($extConf['run_on_extbase']) {
 }
 
 
-t3lib_extMgm::addStaticFile($_EXTKEY,'pi1/static/','Product Catalog');
+t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/', 'Product Catalog');
 
 if (TYPO3_MODE == 'BE') {
-	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_multicatalog_pi1_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_multicatalog_pi1_wizicon.php';
+	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_multicatalog_pi1_wizicon'] = t3lib_extMgm::extPath($_EXTKEY) . 'pi1/class.tx_multicatalog_pi1_wizicon.php';
 }
 ?>
