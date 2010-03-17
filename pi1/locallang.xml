@@ -16,6 +16,7 @@
 			<label index="ff_view.list">List</label>
 			<label index="ff_view.single">Single</label>
 			<label index="morelink">more</label>
+			<label index="noRecordsFound">Sorry. This view does not contain any items.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="backlink">Zur Listenansicht</label>
@@ -28,6 +29,7 @@
 			<label index="ff_view.list">Liste</label>
 			<label index="ff_view.single">Einzelansicht</label>
 			<label index="morelink">mehr</label>
+			<label index="noRecordsFound">Diese Ansicht enthält keine Produkte.</label>
 		</languageKey>
 	</data>
 </T3locallang>

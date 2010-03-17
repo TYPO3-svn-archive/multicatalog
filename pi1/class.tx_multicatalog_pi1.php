@@ -499,7 +499,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	}
 	
 	function fillCObjData($array) {
-		$this->local_cObj->data = t3lib_div::array_merge_recursive_overrule($this->local_cObj->data, $array);
+		if(is_array($array)) $this->local_cObj->data = t3lib_div::array_merge_recursive_overrule($this->local_cObj->data, $array);
 	}
 	
 	/**
@@ -566,8 +566,6 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$fieldsConf['ll_' . $key] = $value;
 		}
 		
-		$this->fillCObjData($fieldsConf);
-		
 		// render TS fields setup
 		foreach($fieldsConf as $field => $value) {
 			// [property.] => [property] if [property] is not defined
@@ -575,6 +573,12 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				$field = substr($field, 0, strlen($field)-1);
 			}
 			if($field{strlen($field)-1} != '.') {
+				
+				// Refill in every iteration step because field-level-conf can overwrite the view-level-conf
+				$this->fillCObjData($fieldsConf);
+				
+				// field-level-conf
+				$this->fillCObjData($fieldsConf[$field . '.']['fields.']);
 				
 				// ###PRICE###
 				if ($field == 'price') {
