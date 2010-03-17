@@ -32,7 +32,7 @@ CREATE TABLE tx_multicatalog_catalog (
 	pictures text,
 	price tinytext,
 	articles tinytext,
-	category int(11) DEFAULT '0' NOT NULL,
+	category tinytext,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
