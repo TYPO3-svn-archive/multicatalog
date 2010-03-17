@@ -1,14 +1,14 @@
-# cat=basic; type=boolean; label=LLL:EXT:multicatalog/locallang.xml:ext_conf.use_articles
+# cat=basic; type=boolean; label=LLL:EXT:multicatalog/Resources/Private/Language/locallang.xml:ext_conf.use_articles
 use_articles = 0
 
-# cat=basic; type=boolean; label=LLL:EXT:multicatalog/locallang.xml:ext_conf.teaser_rte
+# cat=basic; type=boolean; label=LLL:EXT:multicatalog/Resources/Private/Language/locallang.xml:ext_conf.teaser_rte
 teaser_rte = 0
 
-# cat=basic; type=boolean; label=LLL:EXT:multicatalog/locallang.xml:ext_conf.category_records
+# cat=basic; type=boolean; label=LLL:EXT:multicatalog/Resources/Private/Language/locallang.xml:ext_conf.category_records
 category_records = 0
 
-# cat=basic; type=boolean; label=LLL:EXT:multicatalog/locallang.xml:ext_conf.hierachical_categories
+# cat=basic; type=boolean; label=LLL:EXT:multicatalog/Resources/Private/Language/locallang.xml:ext_conf.hierachical_categories
 hierachical_categories = 0
 
-# cat=basic; type=boolean; label=LLL:EXT:multicatalog/locallang.xml:ext_conf.run_on_extbase
+# cat=basic; type=boolean; label=LLL:EXT:multicatalog/Resources/Private/Language/locallang.xml:ext_conf.run_on_extbase
 run_on_extbase = 0

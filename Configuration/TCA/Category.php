@@ -18,7 +18,7 @@ $TCA['tx_multicatalog_category'] = array (
 		),
 		'name' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_category.name',		
+			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_category.name',		
 			'config' => array (
 				'type' => 'input',	
 				'size' => '30',	
@@ -82,7 +82,7 @@ if($_EXTCONF['hierachical_categories']) {
 	$tempColumns = array (
 		'category' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_category.category',		
+			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_category.category',		
 			'config' => array (
 				'type' => 'select',
 				'items' => array(

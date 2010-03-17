@@ -98,7 +98,7 @@ $TCA['tx_multicatalog_catalog'] = array (
         ),
 		'code' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.code',		
+			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_catalog.code',		
 			'config' => array (
 				'type' => 'input',	
 				'size' => '10',
@@ -106,7 +106,7 @@ $TCA['tx_multicatalog_catalog'] = array (
 		),
 		'title' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.title',		
+			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_catalog.title',		
 			'config' => array (
 				'type' => 'input',	
 				'size' => '30',	
@@ -115,7 +115,7 @@ $TCA['tx_multicatalog_catalog'] = array (
 		),
 		'description' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.description',		
+			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_catalog.description',		
 			'config' => array (
 				'type' => 'text',
 				'cols' => '30',
@@ -135,7 +135,7 @@ $TCA['tx_multicatalog_catalog'] = array (
 		),
 		'teaser' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.teaser',		
+			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_catalog.teaser',		
 			'config' => array (
 				'type' => 'text',
 				'cols' => '30',
@@ -144,7 +144,7 @@ $TCA['tx_multicatalog_catalog'] = array (
 		),
 		'pictures' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.pictures',		
+			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_catalog.pictures',		
 			'config' => array (
 				'type' => 'group',
 				'internal_type' => 'file',
@@ -159,7 +159,7 @@ $TCA['tx_multicatalog_catalog'] = array (
 		),
 		'price' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.price',		
+			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_catalog.price',		
 			'config' => array (
 				'type' => 'input',	
 				'size' => '5',
@@ -169,7 +169,7 @@ $TCA['tx_multicatalog_catalog'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => '--div--;LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.tabs.general,sys_language_uid;;2;;3-3-3hidden;;1;;1-1-1, code, title;;;;2-2-2, description;;;richtext[]:rte_transform[imgpath=uploads/tx_multicatalog/rte/];3-3-3, pictures, price')
+		'0' => array('showitem' => '--div--;LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_catalog.tabs.general,sys_language_uid;;2;;3-3-3hidden;;1;;1-1-1, code, title;;;;2-2-2, description;;;richtext[]:rte_transform[imgpath=uploads/tx_multicatalog/rte/];3-3-3, pictures, price')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime, fe_group'),
@@ -184,7 +184,7 @@ if($_EXTCONF['use_articles']){
 	$tempColumns = array (
 		'articles' => array (		
 			'exclude' => 1,
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.articles',
+			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_catalog.articles',
 			'config' => array (
 				'type' => 'inline',
 				'foreign_table' => 'tx_multicatalog_article',
@@ -207,13 +207,13 @@ if($_EXTCONF['use_articles']){
 	);
 	t3lib_div::loadTCA('tx_multicatalog_catalog');
 	t3lib_extMgm::addTCAcolumns('tx_multicatalog_catalog',$tempColumns,1);
-	t3lib_extMgm::addToAllTCAtypes('tx_multicatalog_catalog', '--div--;LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.tabs.articles,articles', '', 'after:price');
+	t3lib_extMgm::addToAllTCAtypes('tx_multicatalog_catalog', '--div--;LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_catalog.tabs.articles,articles', '', 'after:price');
 }
 if($_EXTCONF['category_records']) {
 	$tempColumns = array (
 		'category' => array (		
 			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog.category',		
+			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_catalog.category',		
 			'config' => array (
 				'type' => 'select',	
 				// TODO: Implement user func to display oiginal language id's but current language labels

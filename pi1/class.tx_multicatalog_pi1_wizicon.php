@@ -66,7 +66,7 @@ class tx_multicatalog_pi1_wizicon {
 	 * @return	The array with language labels
 	 */
 	function includeLocalLang()	{
-		$llFile = t3lib_extMgm::extPath('multicatalog').'locallang.xml';
+		$llFile = t3lib_extMgm::extPath('multicatalog').'Resources/Private/Language/locallang.xml';
 		$LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
 
 		return $LOCAL_LANG;

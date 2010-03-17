@@ -5,7 +5,7 @@ t3lib_extMgm::allowTableOnStandardPages('tx_multicatalog_catalog');
 
 $TCA['tx_multicatalog_catalog'] = array (
 	'ctrl' => array (
-		'title'     => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_catalog',		
+		'title'     => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_catalog',		
 		'label'     => 'title',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
@@ -32,7 +32,7 @@ if($extConf['use_articles'] || TYPO3_MODE != 'BE'){
 	
 	$TCA['tx_multicatalog_article'] = array (
 		'ctrl' => array (
-			'title'     => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_article',		
+			'title'     => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_article',		
 			'label'     => 'code',
 			'label_alt' => 'title',
 			'tstamp'    => 'tstamp',
@@ -53,7 +53,7 @@ if($extConf['use_articles'] || TYPO3_MODE != 'BE'){
 if($extConf['category_records'] || TYPO3_MODE != 'BE'){
 	$TCA['tx_multicatalog_category'] = array (
 		'ctrl' => array (
-			'title'     => 'LLL:EXT:multicatalog/locallang_db.xml:tx_multicatalog_category',		
+			'title'     => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_category',		
 			'label'     => 'name',	
 			'tstamp'    => 'tstamp',
 			'crdate'    => 'crdate',
@@ -66,14 +66,14 @@ if($extConf['category_records'] || TYPO3_MODE != 'BE'){
 			'enablecolumns' => array (		
 				'disabled' => 'hidden',	
 			),
-			'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'Configuration/TCA/Category.php',
-			'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_multicatalog_category.gif',
+			'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Category.php',
+			'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'icon_tx_multicatalog_category.gif',
 		),
 	);
 	t3lib_extMgm::allowTableOnStandardPages('tx_multicatalog_category');
 	
 	// Flexform with category records
-	$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1'] ='pi_flexform';
+	$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1'] = 'pi_flexform';
 	t3lib_extMgm::addPiFlexFormValue($_EXTKEY . '_pi1', 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/flexform_category_records.xml');
 } else{
 	// Flexform without category records
@@ -89,14 +89,14 @@ if($extConf['run_on_extbase']) {
 	Tx_Extbase_Utility_Extension::registerPlugin(
 		$_EXTKEY,// The extension name (in UpperCamelCase) or the extension key (in lower_underscore)
 		'Pi1',				// A unique name of the plugin in UpperCamelCase
-		'LLL:EXT:multicatalog/locallang_db.xml:tt_content.list_type_extbase_pi'	// A title shown in the backend dropdown field
+		'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tt_content.list_type_extbase_pi'	// A title shown in the backend dropdown field
 	);
 }else{
 	t3lib_div::loadTCA('tt_content');
 	$TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1']='layout,select_key';
 	t3lib_extMgm::addPlugin(
 		array(
-			'LLL:EXT:multicatalog/locallang_db.xml:tt_content.list_type_pi1',
+			'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tt_content.list_type_pi1',
 			$_EXTKEY . '_pi1',
 			t3lib_extMgm::extRelPath($_EXTKEY) . 'ext_icon.gif'
 		),
