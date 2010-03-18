@@ -237,7 +237,11 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			'###RECORD_SINGLE###'
 		);
 
-		$record = $this->fetchLocalized(FALSE, '*', 'tx_multicatalog_catalog', 'uid = ' . intval($this->piVars['uid']) . $this->cObj->enableFields('tx_multicatalog_catalog')); 
+		$record = $this->fetchLocalized(FALSE, '*', 'tx_multicatalog_catalog', 'uid = ' . intval($this->piVars['uid']) . $this->cObj->enableFields('tx_multicatalog_catalog'));
+		
+		if($this->local_cObj->stdWrap($this->conf['single.']['setIndexDocTitle'], $this->conf['single.']['setIndexDocTitle'])) {
+			$GLOBALS['TSFE']->indexedDocTitle = $record['title']; 
+		}
 		$content = $this->renderRecord($record, $this->getFieldsConf('catalog'), $this->recordtemplate);
 		return $content;
 
@@ -603,7 +607,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				}
 				
 				// link if value.link = 1
-				if($fieldsConf[$field . '.']['link'] == 1) {
+				if($this->local_cObj->stdWrap($fieldsConf[$field . '.']['link'], $fieldsConf[$field . '.']['link.']) == 1) {
 					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->linkTargetPid;
 					$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[' . $this->linkVarName . ']=' . $record['uid'];
 					if($fieldsConf[$field . '.']['link.']['includeCategoryParameter'] == 1 && $this->linkVarName == 'uid') {
@@ -613,7 +617,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				}
 	
 				// backlink if value.backlink = 1
-				if($fieldsConf[$field . '.']['backlink'] == 1) {
+				if($this->local_cObj->stdWrap($fieldsConf[$field . '.']['backlink'], $fieldsConf[$field . '.']['backlink.']) == 1) {
 					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->listPid;
 					
 					if($record['category']) {
