@@ -238,11 +238,6 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		);
 
 		$record = $this->fetchLocalized(FALSE, '*', 'tx_multicatalog_catalog', 'uid = ' . intval($this->piVars['uid']) . $this->cObj->enableFields('tx_multicatalog_catalog'));
-		
-		if($this->local_cObj->stdWrap($this->conf['single.']['setIndexDocTitle'], $this->conf['single.']['setIndexDocTitle.'])) {
-			$GLOBALS['TSFE']->indexedDocTitle = $record['title']; 
-		}
-		
 		$content = $this->renderRecord($record, $this->getFieldsConf('catalog'), $this->recordtemplate);
 		return $content;
 
@@ -605,6 +600,16 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 						$value .= '<li>' . $subcategoryMarkers['###NAME###'] . '</li>';
 					}
 					$value = '<ul class="categories">' . $value . '</ul>';
+				}
+				
+				/**
+				 * If this field is defined, the indexDocTitle for indexed_search is filled with its content
+				 */
+				if($field == 'indexDocTitle') {
+					$GLOBALS['TSFE']->indexedDocTitle = $this->local_cObj->stdWrap(
+						$value,
+						$fieldsConf[$field . '.']
+					);
 				}
 				
 				// link if value.link = 1
