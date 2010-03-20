@@ -237,8 +237,8 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			'###RECORD_SINGLE###'
 		);
 
-		$record = $this->fetchLocalized(FALSE, '*', 'tx_multicatalog_catalog', 'uid = ' . intval($this->piVars['uid']) . $this->cObj->enableFields('tx_multicatalog_catalog'));
-		$content = $this->renderRecord($record, $this->getFieldsConf('catalog'), $this->recordtemplate);
+		$record = $this->fetchLocalized(FALSE, '*', 'tx_multicatalog_product', 'uid = ' . intval($this->piVars['uid']) . $this->cObj->enableFields('tx_multicatalog_product'));
+		$content = $this->renderRecord($record, $this->getFieldsConf('product'), $this->recordtemplate);
 		return $content;
 
 	}
@@ -260,7 +260,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		
 		$where =
 			'pid IN (' . $this->pids . ') ' .
-			$this->cObj->enableFields('tx_multicatalog_catalog');
+			$this->cObj->enableFields('tx_multicatalog_product');
 			
 		if($this->piVars['cat']) {
 			$cat = intval($this->piVars['cat']);
@@ -275,13 +275,13 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		$perPage = 10;
 		$page = max(0,$this->piVars['page']-1);
 		
-		$records = $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_catalog', $where, '', 'sorting ASC');
+		$records = $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_product', $where, '', 'sorting ASC');
 		
 		if(count($records)) {
 			$i=0;
 			foreach($records as $record) {
 				if($i>=($perPage*$page) && $i < ($perPage*($page+1))){
-					$markerArray['###RECORDS###'] .= $this->renderRecord($record, $this->getFieldsConf('catalog'), $this->recordtemplate);
+					$markerArray['###RECORDS###'] .= $this->renderRecord($record, $this->getFieldsConf('product'), $this->recordtemplate);
 				}
 				$i++;
 			}
@@ -402,7 +402,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 *
 	 * All fields are available as markers:
 	 * ====================================
-	 * All fields in tx_multicatalog_catalog are available as markers for the template.
+	 * All fields in tx_multicatalog_product are available as markers for the template.
 	 * E.g. the uid is available as ###UID###. But also fields that come from other Extensions are available.
 	 * Assume you have a field tx_multicatalogdatasheet_sheet added by another extension, the field will be
 	 * available as ###TX_MULTICATALOGDATASHEET_SHEET###. That makes extening this extension very easy! Just
@@ -516,17 +516,17 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 *   	fields{
 	 *   		foo = bar3
 	 *   	}
-	 *   	catalogfields{
+	 *   	productfields{
 	 *   		foo = bar4
 	 *   	}
 	 *   }
 	 * }
-	 * getFieldsConf('list', 'catalog'): [foo] => bar1
+	 * getFieldsConf('list', 'product'): [foo] => bar1
 	 * getFieldsConf('list', 'article'): [foo] => bar2
 	 * getFieldsConf('single', 'article'): [foo] => bar3
-	 * getFieldsConf('single', 'catalog'): [foo] => bar4
+	 * getFieldsConf('single', 'product'): [foo] => bar4
 	 * 
-	 * @param string The current model (catalog, article or category)
+	 * @param string The current model (product, article or category)
 	 * @param string The current view (list, single or catmenu) (defaults to $this->view)
 	 * @return array Fields Configuration
 	 */

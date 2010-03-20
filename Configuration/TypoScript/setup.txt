@@ -7,7 +7,7 @@ plugin.tx_multicatalog_pi1 {
 	
 	
 	list{
-		catalogfields{
+		productfields{
 	  		
 	  		###FIRST_PICTURE###
 		  	first_picture{
@@ -41,7 +41,7 @@ plugin.tx_multicatalog_pi1 {
 	}
 	
 	single{
-		catalogfields{
+		productfields{
 			
 			###BACKLINK###
 			backlink{
@@ -82,7 +82,7 @@ plugin.tx_multicatalog_pi1 {
 
 # Lightbox
 [globalVar = LIT:1 = {$plugin.tx_multicatalog_pi1.enableLightbox}]
-plugin.tx_multicatalog_pi1.single.catalogfields{
+plugin.tx_multicatalog_pi1.single.productfields{
   tx_perfectlightbox_activate = 1
   tx_perfectlightbox_imageset = 1
   pictures.cObject.1.imageLinkWrap >

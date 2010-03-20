@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 20010 Sebastian Gebhard <sebastian.gebhard@gmail.com>
+*  (c) 2010 Sebastian Gebhard <sebastian.gebhard@gmail.com>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -23,36 +23,9 @@
 ***************************************************************/
 
 /**
- * The Catalog Controller for the Multicatalog package
- *
- * @version $Id:$
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License, version 2
+ * A repository for Products
  */
-class Tx_Multicatalog_Controller_CatalogController extends Tx_Extbase_MVC_Controller_ActionController {
-
-	/**
-	 * @var Tx_BlogExample_Domain_Model_BlogRepository
-	 */
-	protected $catalogRepository;
-	
-	/**
-	 * Initializes the current action
-	 *
-	 * @return void
-	 */
-	public function initializeAction() {
-		$this->catalogRepository = t3lib_div::makeInstance('Tx_Multicatalog_Domain_Repository_CatalogRepository');
-	}
-
-	/**
-	 * Index action for this controller. Displays a list of blogs.
-	 *
-	 * @return string The rendered view
-	 */
-	public function indexAction() {
-		$this->view->assign('catalogs', $this->catalogRepository->findAll());
-	}
+class Tx_Multicatalog_Domain_Repository_ProductRepository extends Tx_Extbase_Persistence_Repository {
 
 }
-
 ?>

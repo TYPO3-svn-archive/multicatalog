@@ -1,11 +1,11 @@
 <?php
 if (!defined ('TYPO3_MODE')) die ('Access denied.');
 
-t3lib_extMgm::allowTableOnStandardPages('tx_multicatalog_catalog');
+t3lib_extMgm::allowTableOnStandardPages('tx_multicatalog_product');
 
-$TCA['tx_multicatalog_catalog'] = array (
+$TCA['tx_multicatalog_product'] = array (
 	'ctrl' => array (
-		'title'     => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_catalog',		
+		'title'     => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_product',		
 		'label'     => 'title',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
@@ -22,8 +22,8 @@ $TCA['tx_multicatalog_catalog'] = array (
 			'endtime' => 'endtime',	
 			'fe_group' => 'fe_group',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'Configuration/TCA/Catalog.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_multicatalog_catalog.gif',
+		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'Configuration/TCA/Product.php',
+		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_multicatalog_product.gif',
 	),
 );
 
@@ -43,8 +43,8 @@ if($extConf['use_articles'] || TYPO3_MODE != 'BE'){
 			'enablecolumns' => array (		
 				'disabled' => 'hidden',	
 			),
-			'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'Configuration/TCA/Article.php',
-			'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_multicatalog_article.gif',
+			'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/Article.php',
+			'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'icon_tx_multicatalog_article.gif',
 		),
 	);
 	t3lib_extMgm::allowTableOnStandardPages('tx_multicatalog_article');

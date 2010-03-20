@@ -6,9 +6,9 @@ if (!defined ('TYPO3_MODE')) {
 t3lib_extMgm::addPageTSConfig('
 
 	# ***************************************************************************************
-	# CONFIGURATION of RTE in table "tx_multicatalog_catalog", field "description"
+	# CONFIGURATION of RTE in table "tx_multicatalog_product", field "description"
 	# ***************************************************************************************
-RTE.config.tx_multicatalog_catalog.description {
+RTE.config.tx_multicatalog_product.description {
   hidePStyleItems = H1, H4, H5, H6
   proc.exitHTMLparser_db=1
   proc.exitHTMLparser_db {
@@ -24,7 +24,7 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,																		// The extension name (in UpperCamelCase) or the extension key (in lower_underscore)
 	'Pi2',																			// A unique name of the plugin in UpperCamelCase
 	array(																			// An array holding the controller-action-combinations that are accessible 
-		'Catalog' => 'index,show',	// The first controller and its first action will be the default 
+		'Product' => 'index,show',	// The first controller and its first action will be the default 
 		'Category' => 'index'
 		),
 	array()
@@ -34,7 +34,7 @@ t3lib_extMgm::addPItoST43($_EXTKEY, 'pi1/class.tx_multicatalog_pi1.php', '_pi1',
 
 
 t3lib_extMgm::addTypoScript($_EXTKEY,'setup','
-	tt_content.shortcut.20.0.conf.tx_multicatalog_catalog = < plugin.'.t3lib_extMgm::getCN($_EXTKEY).'_pi1
-	tt_content.shortcut.20.0.conf.tx_multicatalog_catalog.CMD = singleView
+	tt_content.shortcut.20.0.conf.tx_multicatalog_product = < plugin.'.t3lib_extMgm::getCN($_EXTKEY).'_pi1
+	tt_content.shortcut.20.0.conf.tx_multicatalog_product.CMD = singleView
 ',43);
 ?>
