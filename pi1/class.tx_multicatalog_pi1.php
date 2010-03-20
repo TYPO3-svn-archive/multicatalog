@@ -133,11 +133,15 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		 * 2. Page set via TS
 		 * 3. Current FE Pid
 		 */
-		$this->pids = $this->cObj->data['pages'] ?
-			$this->pi_getPidList($this->cObj->data['pages'],$this->cObj->data['recursive']) :
-			( $this->conf['storagePid'] ?
-				$this->conf['storagePid'] :
-				$GLOBALS['TSFE']->id );
+	 	$TS_storagePid = $this->cObj->stdWrap($this->conf['storagePids'], $this->conf['storagePids.']);
+	 	$TS_recursive = $this->cObj->stdWrap($this->conf['storagePids.']['recursive'], $this->conf['storagePids.']['recursive.'])
+	 	if($this->cObj->data['pages']) {
+	 		$this->pids = $this->pi_getPidList($this->cObj->data['pages'], $this->cObj->data['recursive']); 
+	 	} elseif($TS_storagePid) {
+	 		$this->pids = $this->pi_getPidList($TS_storagePid, $TS_recursive); 
+	 	} else {
+	 		$this->pids = $GLOBALS['TSFE']->id
+	 	}
 				
 		/**
 		 * Pid the TS .link property links to.

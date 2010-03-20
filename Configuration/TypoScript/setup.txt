@@ -1,7 +1,7 @@
 plugin.tx_multicatalog_pi1 {
 
 	template = {$plugin.tx_multicatalog_pi1.templateFile}
-	storagePid = {$plugin.tx_multicatalog_pi1.storagePid}
+	storagePids = {$plugin.tx_multicatalog_pi1.storagePid}
 	listPid = {$plugin.tx_multicatalog_pi1.listPid}
 	singlePid = {$plugin.tx_multicatalog_pi1.singlePid}
 	
