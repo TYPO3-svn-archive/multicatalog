@@ -4,7 +4,7 @@ plugin.tx_multicatalog_pi1 {
 	storagePids = {$plugin.tx_multicatalog_pi1.storagePid}
 	listPid = {$plugin.tx_multicatalog_pi1.listPid}
 	singlePid = {$plugin.tx_multicatalog_pi1.singlePid}
-	
+	perPage = 10
 	
 	list{
 		productfields{

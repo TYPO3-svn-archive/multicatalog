@@ -118,13 +118,13 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		 * List Page Id
 		 */
 		$ff_listPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'listPid', 'sDEF');
-		$this->listPid = $ff_listPid ? $ff_listPid : $this->conf['listPid'];
+		$this->listPid = $ff_listPid ? $ff_listPid : $this->cObj->stdWrap($this->conf['listPid'], $this->conf['listPid.']);
 		
 		/**
 		 * Single Page Id
 		 */
 		$ff_singlePid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'singlePid', 'sDEF');
-		$this->singlePid = $ff_singlePid ? $ff_singlePid : $this->conf['singlePid'];
+		$this->singlePid = $ff_singlePid ? $ff_singlePid : $this->cObj->stdWrap($this->conf['singlePid'], $this->conf['singlePid.']);
 		
 		/**
 		 * Storage Pid
@@ -276,7 +276,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			)';
 		}
 		
-		$perPage = 10;
+		$perPage = $this->cObj->stdWrap($this->conf['list.']['perPage'], $this->conf['list.']['perPage.']);
 		$page = max(0,$this->piVars['page']-1);
 		
 		$records = $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_product', $where, '', 'sorting ASC');
