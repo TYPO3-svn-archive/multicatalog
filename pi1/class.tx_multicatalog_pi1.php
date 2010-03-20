@@ -59,28 +59,6 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	private $local_cObj;
 	
 	private $uploadFolder = 'uploads/tx_multicatalog/';
-
-	/**
-      * @var integer x pages before and after active page will be shown
-      */
-     private $pageSchemeAroundAct = 2;
-
-     /**
-      * @var integer Each xth page will be shown in the pagebrowser
-      */
-     private $pageSchemeEach = 10;
-
-     /**
-      * @var integer First x pages will be shown in the pagebrowser
-      */
-     private $pageSchemeFirst = 5;
-
-     /**
-      * @var integer Last x pages will be shown in the pagebrowser
-      */
-     private $pageSchemeLast = 3;
-	
-	
 	
 	/**
 	 * Main method of your PlugIn
@@ -166,6 +144,16 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		$this->template = $this->cObj->fileResource($templateFile);
 		$this->articletemplate = $this->cObj->getSubpart($this->template, '###ARTICLE###');
 		$this->categorytemplate = $this->cObj->getSubpart($this->template, '###CATEGORY_LIST###');
+		
+		/**
+		 * Pagebrowser settings
+		 */
+		$this->pagebrowser['perPage'] = $this->cObj->stdWrap($this->conf['list.']['pagebrowser.']['perPage'], $this->conf['list.']['pagebrowser.']['perPage.']);
+		$this->pagebrowser['pagesAroundAct'] = $this->cObj->stdWrap($this->conf['list.']['pagebrowser.']['pagesAroundAct'], $this->conf['list.']['pagebrowser.']['pagesAroundAct.']);
+		$this->pagebrowser['pagesEach'] = $this->cObj->stdWrap($this->conf['list.']['pagebrowser.']['pagesEach'], $this->conf['list.']['pagebrowser.']['pagesEach.']);
+		$this->pagebrowser['pagesFirst'] = $this->cObj->stdWrap($this->conf['list.']['pagebrowser.']['pagesFirst'], $this->conf['list.']['pagebrowser.']['pagesFirst.']);
+		$this->pagebrowser['pagesLast'] = $this->cObj->stdWrap($this->conf['list.']['pagebrowser.']['pagesLast'], $this->conf['list.']['pagebrowser.']['pagesLast.']);
+		
 	}
 	
 	function dispatchView() {
@@ -276,7 +264,6 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			)';
 		}
 		
-		$perPage = $this->cObj->stdWrap($this->conf['list.']['perPage'], $this->conf['list.']['perPage.']);
 		$page = max(0,$this->piVars['page']-1);
 		
 		$records = $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_product', $where, '', 'sorting ASC');
@@ -304,68 +291,66 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	
 	function pagebrowser($pages) {
 		
-		if($pages<2){return;}
-		$piVars = t3lib_div::_GP($this->prefixId);
+		if($pages < 2) return;
+		
 	         // Active Page
-		$actPage = ($piVars['page'])?$piVars['page']:1;
-		// Page List
+		$actPage = $this->piVars['page'] ? $this->piVars['page'] : 1;
+		
+			// Page List
 		$pageList = array();
 		
 		$pageSchemes = array(
 		    // First Pages
 		    array(
-			'min' => 1,
-			'max' => min($pages, $this->pageSchemeFirst)
+				'min' => 1,
+				'max' => min($pages, $this->pagebrowser['pagesFirst'])
 		    ),
 		    // Last 3
 		    array(
-			'min' => max(1,($pages-($this->pageSchemeLast))),
-			'max' => $pages
+				'min' => max(1, ($pages-($this->pagebrowser['pagesLast']))),
+				'max' => $pages
 		    ),
 		    // ActPage +- 2
 		    array(
-			'min' => max(1,($actPage-($this->pageSchemeAroundAct))),
-			'max' => min($pages,($actPage+($this->pageSchemeAroundAct)))
+				'min' => max(1,( $actPage-($this->pagebrowser['pagesAroundAct']))),
+				'max' => min($pages, ($actPage+($this->pagebrowser['pagesAroundAct'])))
 		    ),
 		    // Each 10
 		    array(
-			'min' => $this->pageSchemeEach,
-			'max' => $pages,
-			'iterate' => $this->pageSchemeEach
+				'min' => $this->pagebrowser['pagesEach'],
+				'max' => $pages,
+				'iterate' => $this->pagebrowser['pagesEach']
 		    )
 		);
 		
 		foreach($pageSchemes as $pageScheme){
-		    $iterate = ($pageScheme['iterate'])?$pageScheme['iterate']:1;
-		    for($i=$pageScheme['min'];$i<=$pageScheme['max'];$i=$i+$iterate){
-			$pageList[] = $i;
+		    $iterate = max(1, $pageScheme['iterate']);
+		    for($i = $pageScheme['min']; $i <= $pageScheme['max']; $i = $i+$iterate) {
+				$pageList[] = $i;
 		    }
 		}
 	
 		$pageList = array_unique($pageList);
 		sort($pageList);
-		
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
 	
 		$typolinkConf = array(
 		    'parameter' => $GLOBALS['TSFE']->id,
 		    'addQueryString' => 1,
 		    'addQueryString.' => array(
-			'method' => 'GET,POST',
-			'exclude' => $this->prefixId.'|page',
-		    )
+				'method' => 'GET,POST',
+				'exclude' => $this->prefixId . '|page',
+		    ),
 		);
 		
 		$content = '<ul class="pagebrowser clearfix">';
-		foreach($pageList as $page){
+		foreach($pageList as $page) {
 		    $content .= '<li>';
 	
-		    if($page != $actPage){
-			$typolinkConf['additionalParams'] = $params.'&'.$this->prefixId.'[page]='.$page;
-			$uri = $cObj->typolink_URL($typolinkConf);
-			$content .= '<a href="'.$uri.'">'.$page.'</a>';
+		    if($page != $actPage) {
+				$typolinkConf['additionalParams'] = '&' . $this->prefixId . '[page]=' . $page;
+				$content .= $this->cObj->typolink($page, $typolinkConf);
 		    }else{
-				$content .= '<span class="act">Seite '.$page.' von '.$pages.'</span>';
+				$content .= '<span class="act">Seite ' . $page . ' von ' . $pages . '</span>';
 		    }
 	
 		    $content .= '</li>';
