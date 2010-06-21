@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Sebastian Gebhard <sebastian.gebhard@gmail.com>
+*  (c) 2010 Sebastian Michaelsen <sebastian.gebhard@gmail.com>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,11 +40,10 @@
 
 require_once(PATH_tslib . 'class.tslib_pibase.php');
 
-
 /**
  * Plugin 'Product Catalog' for the 'multicatalog' extension.
  *
- * @author	Sebastian Gebhard <sebastian.gebhard@gmail.com>
+ * @author	Sebastian Michaelsen <sebastian.gebhard@gmail.com>
  * @package	TYPO3
  * @subpackage	tx_multicatalog
  */

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Sebastian Gebhard <sebastian.gebhard@gmail.com>
+*  (c) 2010 Sebastian Michaelsen <sebastian.gebhard@gmail.com>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -21,19 +21,11 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-/**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- * Hint: use extdeveval to insert/update function index above.
- */
-
-
-
 
 /**
  * Class that adds the wizard icon.
  *
- * @author	Sebastian Gebhard <sebastian.gebhard@gmail.com>
+ * @author	Sebastian Michaelsen <sebastian.gebhard@gmail.com>
  * @package	TYPO3
  * @subpackage	tx_multicatalog
  */
@@ -68,12 +60,10 @@ class tx_multicatalog_pi1_wizicon {
 	function includeLocalLang()	{
 		$llFile = t3lib_extMgm::extPath('multicatalog').'Resources/Private/Language/locallang.xml';
 		$LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
-
 		return $LOCAL_LANG;
 	}
+	
 }
-
-
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/multicatalog/pi1/class.tx_multicatalog_pi1_wizicon.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/multicatalog/pi1/class.tx_multicatalog_pi1_wizicon.php']);
