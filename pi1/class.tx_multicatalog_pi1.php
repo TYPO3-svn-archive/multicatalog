@@ -125,14 +125,14 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		 * For single and list view it's the singlePid
 		 * For catmenu view it's the listPid
 		 */
-		$this->linkTargetPid = ($this->view=='catmenu') ? $this->listPid : $this->singlePid;
+		$this->linkTargetPid = ($this->view == 'catmenu') ? $this->listPid : $this->singlePid;
 		
 		/**
 		 * GET Parameter for the record linked to with the TS .link property
 		 * For single and list view it's $this->prefixId[uid]
 		 * For catmenu view it's $this->prefixId[cat]
 		 */
-		$this->linkVarName = ($this->view=='catmenu') ? 'cat' : 'uid';
+		$this->linkVarName = ($this->view == 'catmenu') ? 'cat' : 'uid';
 				
 		/**
 		 * Template File
@@ -270,12 +270,15 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		if(count($records)) {
 			$i=0;
 			foreach($records as $record) {
-				if($i>=($perPage*$page) && $i < ($perPage*($page+1))){
+				if(
+					$i >= ($this->pagebrowser['perPage'] * $page) &&
+					$i < ($this->pagebrowser['perPage'] * ($page+1))
+				) {
 					$markerArray['###RECORDS###'] .= $this->renderRecord($record, $this->getFieldsConf('product'), $this->recordtemplate);
 				}
 				$i++;
 			}
-			$markerArray['###PAGEBROWSER###'] = $this->pagebrowser(ceil($i/$perPage));
+			$markerArray['###PAGEBROWSER###'] = $this->pagebrowser(ceil($i/$this->pagebrowser['perPage']));
 		}else{
 			$markerArray['###RECORDS###'] = $this->pi_getLL('noRecordsFound');
 			$markerArray['###PAGEBROWSER###'] = '';
@@ -288,9 +291,18 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 
 	}
 	
+	/**
+	 * Renders a pagebrowser
+	 * 
+	 * @param integer $pages
+	 * @return string
+	 */
 	function pagebrowser($pages) {
 		
-		if($pages < 2) return;
+			// If there are less than 2 pages no pagebrowser is needed
+		if($pages < 2) {
+			return;
+		}
 		
 	         // Active Page
 		$actPage = $this->piVars['page'] ? $this->piVars['page'] : 1;
