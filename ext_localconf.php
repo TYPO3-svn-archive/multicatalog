@@ -20,16 +20,19 @@ RTE.config.tx_multicatalog_product.description {
 }
 ');
 
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,																		// The extension name (in UpperCamelCase) or the extension key (in lower_underscore)
-	'Pi2',																			// A unique name of the plugin in UpperCamelCase
-	array(																			// An array holding the controller-action-combinations that are accessible 
-		'Product' => 'index,show',	// The first controller and its first action will be the default 
-		'Category' => 'index'
-		),
-	array()
-);
+if(t3lib_extMgm::isLoaded('extbase')) {
 
+	Tx_Extbase_Utility_Extension::configurePlugin(
+		$_EXTKEY,																		// The extension name (in UpperCamelCase) or the extension key (in lower_underscore)
+		'Pi2',																			// A unique name of the plugin in UpperCamelCase
+		array(																			// An array holding the controller-action-combinations that are accessible 
+			'Product' => 'index,show',	// The first controller and its first action will be the default 
+			'Category' => 'index'
+			),
+		array()
+	);
+
+}
 t3lib_extMgm::addPItoST43($_EXTKEY, 'pi1/class.tx_multicatalog_pi1.php', '_pi1', 'list_type', 1);
 
 
