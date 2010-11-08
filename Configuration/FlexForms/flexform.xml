@@ -35,7 +35,7 @@
             <TCEforms>
               <label>LLL:EXT:multicatalog/pi1/locallang.xml:ff_templateFile</label>
               <config>
-                <type>string</type>
+                <type>input</type>
               </config>
             </TCEforms>
           </templateFile>
