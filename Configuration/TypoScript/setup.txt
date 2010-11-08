@@ -4,10 +4,14 @@ plugin.tx_multicatalog_pi1 {
 	storagePids = {$plugin.tx_multicatalog_pi1.storagePid}
 	listPid = {$plugin.tx_multicatalog_pi1.listPid}
 	singlePid = {$plugin.tx_multicatalog_pi1.singlePid}
-	perPage = 10
 	
-	list{
-		productfields{
+	list {
+		
+		pagebrowser {
+			perPage = 10
+		}
+		
+		productfields {
 	  		
 	  		###FIRST_PICTURE###
 		  	first_picture{
