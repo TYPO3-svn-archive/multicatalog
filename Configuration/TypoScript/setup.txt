@@ -76,7 +76,7 @@ plugin.tx_multicatalog_pi1 {
 	
 	catmenu{
 		fields{
-			name.link = 0
+			name.link = 1
 			subcategories = enable
 		}
 	}
