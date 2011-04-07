@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Sebastian Michaelsen <sebastian.gebhard@gmail.com>
+*  (c) 2011 Sebastian Michaelsen <sebastian.gebhard@gmail.com>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -316,9 +316,9 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		if($this->restrictToProducts) {
 			$where .= ' AND uid IN (' . $this->restrictToProducts . ')';
 		}
-			
+		
 		if($this->piVars['cat']) {
-			$catgory = intval($this->piVars['cat']);
+			$category = intval($this->piVars['cat']);
 			$where .= ' AND (
 				category = ' . $category . ' OR
 				category LIKE "' . $category . ',%" OR
