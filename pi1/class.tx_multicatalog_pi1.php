@@ -119,6 +119,18 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 	} else {
 	 		$this->pids = $GLOBALS['TSFE']->id;
 	 	}
+		
+		/**
+		 * Restrict to Categories
+		 */
+		$ff_restrictToCategories = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restrictToCategories', 'sDEF');
+		$this->restrictToCategories = $ff_restrictToCategories ? $ff_restrictToCategories : $this->cObj->stdWrap($this->conf['list.']['restrictToCategories'], $this->conf['list.']['restrictToCategories.']);
+		
+		/**
+		 * Restrict to Products
+		 */
+		$ff_restrictToProducts = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restrictToProducts', 'sDEF');
+		$this->restrictToProducts = $ff_restrictToProducts ? $ff_restrictToProducts : $this->cObj->stdWrap($this->conf['list.']['restrictToProducts'], $this->conf['list.']['restrictToProducts.']);
 				
 		/**
 		 * Pid the TS .link property links to.
@@ -249,23 +261,9 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 
 		$markerArray = $this->recordAndFieldsConfToMarkerArray(array(), $this->getFieldsConf());
 		
-		$where =
-			'pid IN (' . $this->pids . ') ' .
-			$this->cObj->enableFields('tx_multicatalog_product');
-			
-		if($this->piVars['cat']) {
-			$cat = intval($this->piVars['cat']);
-			$where .= 'AND (
-				category = ' . $cat . ' OR
-				category LIKE "' . $cat . ',%" OR
-				category LIKE "%,' . $cat . ',%" OR
-				category LIKE "%,' . $cat . '"
-			)';
-		}
+		$page = max(0, $this->piVars['page']-1);
 		
-		$page = max(0,$this->piVars['page']-1);
-		
-		$records = $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_product', $where, '', 'sorting ASC');
+		$records = $this->listView_getRecords();
 		
 		if(count($records)) {
 			$i=0;
@@ -289,6 +287,47 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$markerArray
 		);
 
+	}
+	
+	/**
+	 * Get records for the list view
+	 *
+	 * @return array	Products
+	 */
+	function listView_getRecords() {
+		$where =
+			'pid IN (' . $this->pids . ') ' .
+			$this->cObj->enableFields('tx_multicatalog_product');
+			
+		if($this->restrictToCategories) {
+			$localWhere = array();
+			foreach(t3lib_div::trimExplode(',', $this->restrictToCategories) as $category) {
+				$category = intval($category);
+				$localWhere[] = ' (
+					category = ' . $category . ' OR
+					category LIKE "' . $category . ',%" OR
+					category LIKE "%,' . $category . ',%" OR
+					category LIKE "%,' . $category . '"
+				)';
+			}
+			$where .= ' AND ' . join(' OR ', $localWhere);
+		}
+		
+		if($this->restrictToProducts) {
+			$where .= ' AND uid IN (' . $this->restrictToProducts . ')';
+		}
+			
+		if($this->piVars['cat']) {
+			$catgory = intval($this->piVars['cat']);
+			$where .= ' AND (
+				category = ' . $category . ' OR
+				category LIKE "' . $category . ',%" OR
+				category LIKE "%,' . $category . ',%" OR
+				category LIKE "%,' . $category . '"
+			)';
+		}
+		
+		return $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_product', $where, '', 'sorting ASC');
 	}
 	
 	/**
