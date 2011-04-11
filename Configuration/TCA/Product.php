@@ -153,7 +153,7 @@ $TCA['tx_multicatalog_product'] = array (
 				'minitems' => 0,
 				'maxitems' => 10,
 			)
-		),
+		),		'pictures_alt' => array (					'exclude' => 0,					'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_product.pictures_alt',					'config' => array (				'type' => 'text',				'cols' => '30',				'rows' => '4',			),		),
 		'price' => array (		
 			'exclude' => 0,		
 			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_product.price',		
@@ -166,11 +166,11 @@ $TCA['tx_multicatalog_product'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => '--div--;LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_product.tabs.general,sys_language_uid;;2;;3-3-3hidden;;1;;1-1-1, code, title;;;;2-2-2, description;;;richtext[]:rte_transform[imgpath=uploads/tx_multicatalog/rte/];3-3-3, pictures, price')
+		'0' => array('showitem' => '			--div--;LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_product.tabs.general,				sys_language_uid;;2;;3-3-3hidden;;1;;1-1-1,				code, title;;;;2-2-2,				description;;;richtext[]:rte_transform[imgpath=uploads/tx_multicatalog/rte/];3-3-3,				pictures,				pictures_alt,				price		')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime, fe_group'),
-		'2' => Array('showitem' => 't3ver_label,l18n_parent'),
+		'2' => array('showitem' => 't3ver_label,l18n_parent'),
 	)
 );
 

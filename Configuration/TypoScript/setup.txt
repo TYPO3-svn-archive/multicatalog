@@ -64,8 +64,10 @@ plugin.tx_multicatalog_pi1 {
 					file.import.current = 1
 					file.width = 200
 					altText >
-					altText.field = title
-					altText := replaceString('"','&quot;')
+					altText.field = pictures_alt
+					altText.stripHtml = 1
+					altText.split.token.char = 10
+					altText.split.returnKey.data = register : IMAGE_NUM_CURRENT
 					titleText < .altText
 	   			}
 				maxW = 200

@@ -30,6 +30,7 @@ CREATE TABLE tx_multicatalog_product (
 	description text,
 	teaser text,
 	pictures text,
+	pictures_alt text,
 	price tinytext,
 	articles tinytext,
 	category tinytext,

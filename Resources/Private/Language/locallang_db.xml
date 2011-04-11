@@ -15,6 +15,7 @@
 			<label index="tx_multicatalog_product.title">Title</label>
 			<label index="tx_multicatalog_product.description">Description</label>
 			<label index="tx_multicatalog_product.pictures">Pictures</label>
+			<label index="tx_multicatalog_product.pictures_alt">Alternative Texts for Images (one per line)</label>
 			<label index="tx_multicatalog_product.price">Price</label>
 			<label index="tx_multicatalog_product.teaser">Teaser</label>
 			<label index="tx_multicatalog_product.articles">Articles</label>
@@ -37,6 +38,7 @@
 			<label index="tx_multicatalog_product.title">Titel</label>
 			<label index="tx_multicatalog_product.description">Beschreibung</label>
 			<label index="tx_multicatalog_product.pictures">Bilder</label>
+			<label index="tx_multicatalog_product.pictures_alt">Alternativtexte für Bilder (ein Bild pro Zeile)</label>
 			<label index="tx_multicatalog_product.price">Preis</label>
 			<label index="tx_multicatalog_product.teaser">Kurzbeschreibung</label>
 			<label index="tx_multicatalog_product.articles">Artikel</label>
