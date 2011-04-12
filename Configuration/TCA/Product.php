@@ -64,7 +64,7 @@ $TCA['tx_multicatalog_product'] = array (
 				'items' => Array (
 				    Array('', 0),
 				),
-				'foreign_table' => 'tx_multicatalog_catalog',
+				'foreign_table' => 'tx_multicatalog_product',
 				'foreign_table_where' => 'AND tx_multicatalog_product.uid=###REC_FIELD_l18n_parent### AND tx_multicatalog_product.sys_language_uid IN (-1,0)',
 			)
         ),
@@ -166,11 +166,11 @@ $TCA['tx_multicatalog_product'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => '			--div--;LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_product.tabs.general,				sys_language_uid;;2;;3-3-3hidden;;1;;1-1-1,				code, title;;;;2-2-2,				description;;;richtext[]:rte_transform[imgpath=uploads/tx_multicatalog/rte/];3-3-3,				pictures,				pictures_alt,				price		')
+		'0' => array('showitem' => '			--div--;LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_product.tabs.general,				sys_language_uid;;2;;3-3-3hidden;;1;;1-1-1,				title;;title_palette;;2-2-2,				description;;;richtext[]:rte_transform[imgpath=uploads/tx_multicatalog/rte/];3-3-3,				pictures;;3,				price		')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime, fe_group'),
-		'2' => array('showitem' => 't3ver_label,l18n_parent'),
+		'2' => array('showitem' => 't3ver_label,l18n_parent'),		'3' => array('showitem' => 'pictures_alt'),		'title_palette' => array('showitem' => 'code')
 	)
 );
 
@@ -224,7 +224,7 @@ if($_EXTCONF['category_records']) {
 	);
 	t3lib_div::loadTCA('tx_multicatalog_product');
 	t3lib_extMgm::addTCAcolumns('tx_multicatalog_product',$tempColumns,1);
-	t3lib_extMgm::addToAllTCAtypes('tx_multicatalog_product', 'category', '', 'before:code');
+	t3lib_extMgm::addToAllTCAtypes('tx_multicatalog_product', 'category', '', 'after:title');
 }
 // Add teaser (RTE or plain)
 $teaser = 'teaser';

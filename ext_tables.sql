@@ -1,5 +1,5 @@
 #
-# Table structure for table 'tx_multicatalog_catalog'
+# Table structure for table 'tx_multicatalog_product'
 #
 CREATE TABLE tx_multicatalog_product (
 	uid int(11) NOT NULL auto_increment,
